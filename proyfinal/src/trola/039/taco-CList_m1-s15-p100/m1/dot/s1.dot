@@ -1,0 +1,6 @@
+digraph s1 {
+	nodesep=.5; ordering=out;
+	null [ shape = invhouse ];
+	N0->null 	[ label = flistNext ];
+	N0->N1 	[ label = flistPrevious ];
+}

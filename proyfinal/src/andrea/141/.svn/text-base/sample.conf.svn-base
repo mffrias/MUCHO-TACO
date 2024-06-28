@@ -1,0 +1,20 @@
+[experiment]
+id:                MyTestExp
+take:              01a
+tasks:             /tmp/tasks
+timeout:           30
+
+[logging]
+weather_reports:   Yes
+weather_every:     10
+events_stdout:     task|wrep
+
+[paths]
+java_home:         /usr
+local_storage:     /tmp/andrea-localstore
+minisat_binary:    /opt/bin/minisat220_static_rs
+
+[alloy]
+class_name:        rfm.alloy.CLI
+class_path:        /Users/nrosner/alloycli-156.jar
+shlib_path:        /Users/nrosner/x86-mac

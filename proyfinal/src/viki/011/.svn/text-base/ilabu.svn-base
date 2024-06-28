@@ -1,0 +1,315 @@
+#!/bin/sh
+
+##
+##  Modo de uso: sourcear, no ejecutar!
+##  Este archivo puede ser sourceado sin importar desde dónde
+##  (a diferencia de `activar', acá todos los paths son absolutos).
+##
+
+
+#
+# El directorio principal donde guardaremos todos los datos.
+#
+
+LABDIR=${HOME}/lab
+
+#
+# Subdirectorios para cachear pings y stats (equipos vivos).
+#
+
+LABPINGS=${LABDIR}/pings
+LABSTATS=${LABDIR}/stats
+
+#
+# Subdirectorio para guardar los datos del "current lab".
+#
+
+LABCUR=${LABDIR}/cur
+
+#
+# Archivo de hosts activos (del "current lab") para ser usado con pssh.
+#
+
+LABCUR_HOSTS=${LABCUR}/hosts
+
+#
+# Subsubdirs para guardar todos los stdouts y stderrs del ultimo pssh.
+#
+
+LABCUR_OUTDIR=${LABCUR}/outs
+LABCUR_ERRDIR=${LABCUR}/errs
+
+#
+# Archivo de máquinas activas (del "current lab"; idem al de hosts pero
+# posiblemente con sufijos) para ser usado exclusivamente por mpiexec.
+#
+
+LABCUR_MACHS=${LABCUR}/machs
+
+#
+# Archivo de selección (del "current lab") para ser usado por humanos.
+# Contiene una copia del subconjunto de renglones del último labgrep.
+#
+
+LABCUR_SUBSET=${LABCUR}/subset
+
+#
+# Archivos para la separacion de hosts entre los single core y los
+# double core del lab del itba.
+#
+
+LABCUR_MACHS_SINGLE=${LABCUR}/machs_single
+
+LABCUR_MACHS_DOUBLE=${LABCUR}/machs_double
+
+LABCUR_SUBSET_SINGLE=${LABCUR}/subset_single
+
+LABCUR_SUBSET_DOUBLE=${LABCUR}/subset_double
+
+LABCUR_HOSTS_SINGLE=${LABCUR}/hosts_single
+
+LABCUR_HOSTS_DOUBLE=${LABCUR}/hosts_double
+
+#
+# Creamos los directorios en caso que no existan:
+#
+
+[ -d ${LABDIR}   ] || mkdir -p ${LABDIR}
+[ -d ${LABCUR}   ] || mkdir ${LABCUR}
+[ -d ${LABPINGS} ] || mkdir ${LABPINGS}
+[ -d ${LABSTATS} ] || mkdir ${LABSTATS}
+
+#
+# Creamos cachés iniciales (vacíos) en caso de subdir vacío:
+#
+
+[ $(ls ${LABPINGS} | wc -l) -ge 1 ] || touch ${LABPINGS}/$(date ${LABTSFMT})
+[ $(ls ${LABSTATS} | wc -l) -ge 1 ] || touch ${LABSTATS}/$(date ${LABTSFMT})
+
+#
+# Exportamos algunas variables al entorno:
+#
+
+export LABDIR LABCUR LABPINGS LABSTATS
+
+#
+# Algunas variables de entorno especiales que afectan a pssh:
+#
+
+PSSH_HOSTS=${LABCUR_HOSTS}
+PSSH_OUTDIR=${LABCUR_OUTDIR}
+PSSH_ERRDIR=${LABCUR_ERRDIR}
+PSSH_PAR=16
+PSSH_TIMEOUT=60
+#PSSH_VERBOSE=""
+#PSSH_OPTIONS=""
+export PSSH_HOSTS PSSH_OUTDIR PSSH_ERRDIR PSSH_TIMEOUT PSSH_PAR
+
+#
+# Otros valores por defecto.
+#
+
+LABTIMEOUT_PRESTO=1
+LABTIMEOUT_ANDANTE=5
+LABTIMEOUT_LARGO=10
+
+LABTSFMT="+%s"
+
+
+
+#
+#  Uso:  itba_ping_all
+#   para pinguear en paralelo todas las IPs potencialmente `labu'
+#   y guardar automáticamente una copia (caché local) del resultado.
+#
+#  Tener presente
+#    * que labuNNN != IP 10.6.0.NNN  (offset +20, e.g. labu80 = .100)
+#    * que hay muchas menos máquinas reales que IPs reservados
+#    * que algunas máquinas del rango resp. a ping pero no sshd
+#
+
+function itba_ping_all()
+{
+	nmap -sP "10.6.0.21-220" \
+	| grep 'is up' | cut -d\  -f2 | cut -d. -f1 | grep labu
+}
+
+
+#
+#  Uso:  itba_list_pingable
+#   para listar los labuX que respondían a ping hasta recientemente
+#
+#  Los resultados de itba_ping_all se cachean (manteniendo el formato)
+#  y sólo se releen si pasó cierta cantidad de tiempo, para mantener a
+#  raya la cantidad de nmaps con impacto en la red física.
+#
+
+function itba_list_pingable()
+{
+	BESTNAME=$(ls -t ${LABPINGS} | head -1)
+	AGE=$(expr $(date +%s) - $(date -r ${LABPINGS}/${BESTNAME} +%s))
+	MAX_AGE=90
+
+	if [ -n $AGE ] && [ $AGE -le $MAX_AGE ] ; then
+	    # usamos version cacheada
+		cat ${LABPINGS}/${BESTNAME} | column -t
+	else
+		# cache demasiado viejo
+        echo "pings cache is ${AGE}s old; re-pinging all ..." >&2
+		itba_ping_all | tee ${LABPINGS}/$(date ${LABTSFMT}) | column -t
+		# actualizamos las dos vars
+		BESTNAME=$(ls -t ${LABPINGS} | head -1)
+		AGE=$(expr $(date +%s) - $(date -r ${LABPINGS}/${BESTNAME} +%s))
+	fi
+
+	echo "$(wc -l ${LABPINGS}/${BESTNAME}|cut -d\  -f 1) pongs as of $(date -r ${LABPINGS}/${BESTNAME} +%X) (${AGE}s ago)." >&2
+}
+
+
+#
+#  Uso:  itba_tryssh_for <timeout> <hostname> [<comando> [<args>]]
+#   para desistir tras <timeout> seg. devolviendo nonzero, y para que
+#   un <destino> nuevo se auto-agregue a known_hosts (sin "yes/no?").
+#
+
+function itba_tryssh_for()
+{
+	MAXSECS=$1; shift 1
+        ssh -o BatchMode=yes \
+	    -o StrictHostKeyChecking=no \
+	    -o ConnectTimeout=$MAXSECS \
+	    $@
+}
+
+
+#
+#  Uso:  itba_check_node <hostname>
+#   para averiguar si el ticket Krb para AFS está vigente
+#   (tramitando en caso de no estarlo, renovando si lo estaba)
+#
+
+function itba_check_node()
+{
+    NODENAME=$1
+
+	itba_tryssh_for ${LABTIMEOUT_PRESTO} ${NODENAME} \
+	  'aklog && echo $(uname -n|cut -d. -f1) \
+	                 $(uname -p|sed "s/ /_/g") \
+	                 $(cat /proc/loadavg) $(who -q|head -1)'
+}
+
+
+
+#
+# itba_check_nodes <labuX> [<labuY> <labuZ> ...]
+#   para mapear el comando anterior sobre varios y contar la
+#   cantidad de fracasos (respetando el 0 == todo ok de POSIX).
+#
+
+function itba_labu() { # acepta también numero de labu a secas
+    echo $1 | sed "s/[^0-9]*\([0-9]*$\)/labu\1/";
+}
+
+function itba_check_nodes()
+{
+	nfailed=0 ; for hn in $@; do
+	  itba_check_node $(itba_labu ${hn}) \
+	   || nfailed=$(expr $nfailed + 1)
+	done
+	return $(expr $nfailed)
+}
+
+
+
+#
+# itba_status
+#   muestra una tablita con los labus actualmente sshables
+#   y la cachea de modo similar a itba_list_pingable
+#
+
+function itba_status()
+{
+	MAX_AGE=180
+	BEST=$(ls -t ${LABSTATS} | head -1)
+	AGE=$(expr $(date +%s) - $(date -r ${LABSTATS}/${BEST} +%s))
+
+	if [ -z $1 ] && [ $AGE -le $MAX_AGE ] ; then # usamos version cacheada
+	    cat ${LABSTATS}/${BEST}
+	else # laburar
+	    echo "status cache is ${AGE}s old; rescanning ..."
+		itba_check_nodes $(itba_list_pingable) \
+		    | sed 's/(R)\|(TM)//g' \
+		    | sed 's/[_@]*_\([1-9]\.[0-9]*GHz\)/ \1/' \
+		    | column -t \
+		    | tee ${LABSTATS}/$(date ${LABTSFMT})
+		# recomputamos ambas vars
+		BEST=$(ls -t ${LABSTATS} | head -1)
+		AGE=$(expr $(date +%s) - $(date -r ${LABSTATS}/${BEST} +%s))
+	fi
+	# resumen
+	cat ${LABSTATS}/${BEST} | awk '{print$1" "$2" "$3}' | sort -k 2 | uniq -c -f 1 >&2
+	echo "$(wc -l ${LABSTATS}/${BEST}|cut -d\  -f 1) sshd auths OK as of $(date -r ${LABSTATS}/${BEST} +%X) (${AGE}s ago)." >&2
+}
+
+
+#
+# itba_status_grep
+#   permite seleccionar el subconjunto de renglones del status que
+#   matchée un string arbitrario, y actualiza automáticamente los
+#   archivos LABCUR_SUBSET, LABCUR_HOSTS y LABCUR_MACHS (los pisa!)
+#
+#   para disyunción usar "esto\\\|aquello" o 'esto\|aquello'
+#   (no "esto|aquello", porque el shell lo leería como un pipe)
+#
+
+function itba_status_grep()
+{
+    FILTER=$1
+    itba_status 2>/dev/null | grep '^labu[1-9]' \
+                | grep -i "${FILTER}" | tee ${LABCUR_SUBSET} \
+                | awk '{print$1":2"}' | tee ${LABCUR_MACHS} \
+                | sed 's/:[1-9]$//' | tee ${LABCUR_HOSTS} \
+                >/dev/null
+
+    cat ${LABCUR_SUBSET}
+    wc -l ${LABCUR_HOSTS} >&2
+}
+
+function itba_status_grep_cored()
+{
+    FILTER='Pentium'
+    FILTER2='Core'
+    cat ${LABCUR_SUBSET} 2>/dev/null | grep '^labu[1-9]' \
+                | grep -i "${FILTER}" | tee ${LABCUR_SUBSET_SINGLE} \
+                | awk '{print$1":1"}' | tee ${LABCUR_MACHS_SINGLE} \
+                | sed 's/:[1-9]$//' | tee ${LABCUR_HOSTS_SINGLE} \
+                >/dev/null
+    cat ${LABCUR_SUBSET} 2>/dev/null | grep '^labu[1-9]' \
+                | grep -i "${FILTER2}" | tee ${LABCUR_SUBSET_DOUBLE} \
+                | awk '{print$1":2"}' | tee ${LABCUR_MACHS_DOUBLE} \
+                | sed 's/:[1-9]$//' | tee ${LABCUR_HOSTS_DOUBLE} \
+                >/dev/null
+	
+    cat ${LABCUR_SUBSET_SINGLE} ${LABCUR_SUBSET_DOUBLE} > ${LABCUR_SUBSET}
+    cat ${LABCUR_MACHS_SINGLE} ${LABCUR_MACHS_DOUBLE} > ${LABCUR_MACHS}
+    cat ${LABCUR_HOSTS_SINGLE} ${LABCUR_HOSTS_DOUBLE} > ${LABCUR_HOSTS}
+
+    cat ${LABCUR_SUBSET}
+    wc -l ${LABCUR_HOSTS} >&2
+}
+
+
+
+
+#
+# Algunos aliases para abreviar en el uso interactivo:
+# (para scripts usar siempre los nombres completos!)
+#
+
+alias labping="itba_list_pingable"
+alias labstat="itba_status"
+alias labgrep="itba_status_grep"
+alias labgrepcored="itba_status_grep_cored"
+
+
+

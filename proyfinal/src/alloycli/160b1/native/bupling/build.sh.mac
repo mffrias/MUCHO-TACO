@@ -1,0 +1,21 @@
+#!/bin/sh
+
+#
+# This seems to work OK on Darwin (tried OS X 10.6.x + g++ 4.1.x from Dev Tools)
+#
+
+echo "Compiling ..."
+g++ -c \
+ -O3 -DNDEBUG \
+ -Wall -D __STDC_LIMIT_MACROS -D __STDC_FORMAT_MACROS \
+ -fPIC -shared \
+ --friend-injection \
+ -I /Library/Java/Home/include \
+  *.cc
+
+echo "Linking ..."
+g++ -dynamiclib -framework JavaVM \
+ -o liblingeling.jnilib \
+ -I /Library/Java/Home/include \
+  kodkod_engine_satlab_Lingeling.o Solver.o System.o Options.o
+

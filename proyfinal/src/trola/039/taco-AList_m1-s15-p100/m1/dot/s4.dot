@@ -1,0 +1,6 @@
+digraph s4 {
+	nodesep=.5; ordering=out;
+	null [ shape = invhouse ];
+	N0->N1 	[ label = fnext ];
+	N0->N2 	[ label = fprevious ];
+}

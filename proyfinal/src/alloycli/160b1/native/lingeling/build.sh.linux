@@ -1,0 +1,10 @@
+g++ -c -Wall -Wno-parentheses \
+ -O3 -DNDEBUG -fPIC -shared \
+ -I /usr/lib/jvm/java-6-sun/include \
+ -I /usr/lib/jvm/java-6-sun/include/linux \
+ *.cc
+
+g++ -shared \
+ -o liblingeling.so \
+ -I /usr/lib/jvm/java-6-sun/include \
+ kodkod_engine_satlab_Lingeling.o lglib.o

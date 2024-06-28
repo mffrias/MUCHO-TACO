@@ -1,0 +1,8 @@
+digraph s7 {
+	nodesep=.5; ordering=out;
+	null [ shape = invhouse ];
+	N0->N1 	[ label = fleft ];
+	N0->N2 	[ label = fright ];
+	N1->N3 	[ label = fleft ];
+	N1->N3 	[ label = fright ];
+}

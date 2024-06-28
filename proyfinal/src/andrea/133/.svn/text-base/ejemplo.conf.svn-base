@@ -1,0 +1,35 @@
+[experiment]
+id:                mi.bello.experimento
+take:              001A
+tasks:             /path/al/dir/local/con/las/tareas
+timeout:           3600
+jvm_heap_initial:  300M
+jvm_heap_maximum:  300M
+jvm_thread_stack:  16M
+
+[logging]
+weather_reports:   Yes
+weather_every:     30
+events_stdout:     task|wrep
+
+[paths]
+local_storage:     /path/a/algun/dir/local
+java_home:         /home/nrosner/opt/jre1.6.0_07
+
+[alloy]
+class_name:        rfm.alloy.CLI
+class_path:        /home/nrosner/opt/alloycli
+shlib_path:        /home/nrosner/opt/alloycli/amd64-linux
+
+[jforge]
+class_name:        rfm.jforge.CLI
+class_path:        /home/nrosner/opt/jforgecli/0.4.3/bin
+shlib_path:        /home/nrosner/opt/alloycli/amd64-linux
+cp_forge:          /home/nrosner/opt/forge/2009.07.29/forge.jar
+cp_kodkod:         /home/nrosner/opt/kodkod/2009.17.03/kodkod.jar
+cp_antlr:          /home/nrosner/opt/runtime/antlr/3.1.4
+cp_junit:          /home/nrosner/opt/runtime/junit/4.7
+cp_soot:           /home/nrosner/opt/runtime/soot/2.3.0
+cp_jasmin:         /home/nrosner/opt/runtime/jasmin/2.3.0
+cp_polyglot:       /home/nrosner/opt/runtime/polyglot/1.3.5
+cp_commons_cli:    /home/nrosner/opt/runtime/commons-cli/1.2.0
