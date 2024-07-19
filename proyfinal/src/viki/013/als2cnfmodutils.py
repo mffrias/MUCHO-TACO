@@ -197,9 +197,11 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Fa
     if verbose:
         print "Generating rels ..."
 
-    tool.launch(als_path)
+    tool.launch(als_path)   
+    print("tool was lunched. als path is: " , als_path)
     rels_path = als_path.replace(".als", ".rels")
     tool.launch(als_inv_path)
+    print("tool was lunched 2")
     rels_inv_path = als_inv_path.replace(".inv", ".inv.rels")
 
     if verbose:

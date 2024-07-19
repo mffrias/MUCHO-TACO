@@ -68,6 +68,7 @@ def parse_cmd_line():
     nrels = 0
     
     for opt, val in opts:
+        print("current val is", val)
         if opt in ('-r', '--rel'):
             settings.rels[nrels] = val
             nrels += 1

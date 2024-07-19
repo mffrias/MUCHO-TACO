@@ -16,7 +16,7 @@ from time    import sleep
 class Master(Process):
 
     def start(self):
-
+        print("we enter to START function")
         self.tasks_idle = []
         self.tasks_busy = set()
         self.tasks_done = set()
@@ -35,13 +35,13 @@ class Master(Process):
             self.weather_every = float(settings.logging['weather_every'])
             self.bb.add(WeatherEvent('preinit', self.get_stats()))
             self.last_weather = network.time()
-
+        print("before populate tq")
         self.populate_task_queue() # Load all task files into main memory (!)
-
+        print("after ptq")
         if self.weather_reports: # Force wrep when ready to start working
             self.bb.add(WeatherEvent('initial', self.get_stats()))
             self.last_weather = network.time()
-
+        print("")
         self.main_loop() # Run main event loop until done
 
         self.send_exit_messages() # Tell everyone to quit
@@ -57,14 +57,20 @@ class Master(Process):
         while not self.finished:
 
             if network.msg_waiting():
+                print("message waiting")
                 self.handle_message(network.receive())
+                print("message waiting OUT")
+                
 
             if self.workers_idle and self.tasks_idle:
+                print("Sent ")
                 worker, task = self.assign_mission()
                 network.send(HaveMission(worker, task))
-
+                print("Sent Done")
+                
             if not (self.tasks_idle or self.workers_busy):
                 self.finished = True
+                print("DONE WITH ALL TASKS")
 
             if self.weather_reports:
                 current_time = network.time()

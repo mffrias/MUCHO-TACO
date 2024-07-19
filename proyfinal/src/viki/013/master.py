@@ -90,6 +90,7 @@ class AlsPartitionerMaster(Master):
         Master.start(self)
         
     def main_loop(self):
+        print("starting main loop")
         auxQueue = ExtendedQueue()
         while self.tasks_idle:
             auxQueue.append(self.tasks_idle.pop(0))
@@ -100,13 +101,16 @@ class AlsPartitionerMaster(Master):
         while not self.finished:
 
             if andrea.network.msg_waiting():
+                print("pending message")
                 self.handle_message(andrea.network.receive())
                             
             if self.workers_idle and self.tasks_idle:
+                print("assigning mission")
                 worker, task = self.assign_mission()
                 andrea.network.send(HaveMission(worker, task))
 
             if not (self.tasks_idle or self.workers_busy or self.partition_tasks or self.partitioning):
+                print("finishing tasks")
                 self.finished = True
 
             if self.weather_reports:
@@ -218,10 +222,13 @@ class AlsPartitionerMaster(Master):
         return restrictions
 
     def populate_task_queue(self):
+        print("entramos a ptq")
         queue_create_phase = self.bb.add(Event('main', 'queue.create'))
+        print("hemos pasado el create phase")
         task_paths = list_all_files(andrea.settings.experiment['tasks'], ('.als'))
         inv_paths = list_all_files(andrea.settings.experiment['tasks'], ('.inv'))
-        #print task_paths
+        print("task path", task_paths)
+        print("inv paths", inv_paths)
         #PEND: experimental cabezota (mejorar algun dia)
         assert len(task_paths) != 0 and len(inv_paths) != 0, "als and/or inv files not provided"
         assert len(task_paths) == 1 and len(inv_paths) == 1, "multiple als and/or inv files provided"
