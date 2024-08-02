@@ -57,13 +57,13 @@ class InfiniteTimeoutWorker(Worker):
         self.tools    = dict({'cnf': self.minisat})
         self.rcstrs   = dict({'cnf': Minisat220.RC_STR})
         self.proc_inv = True
-	self.stats_inv = None
+        self.stats_inv = None
         self.overhead = 0.0
        
     def clear_state(self):
         Worker.clear_state(self)
         self.proc_inv = True
-	self.stats_inv = None
+        self.stats_inv = None
         self.overhead = 0.0
         
     def main_loop_idle(self):
@@ -75,7 +75,7 @@ class InfiniteTimeoutWorker(Worker):
             msg = andrea.network.receive(Rank.MASTER, Tag.HAVE_MISSION)
             self.current_task = msg.body # (tid, ttype, tdata, infinite_timeout)
             if self.current_task[3] and settings.debug:
-                print 'task %s will be solved with infinite timeout' % self.current_task[0]
+                print ('task %s will be solved with infinite timeout' % self.current_task[0])
             self.handle_mission(self.current_task)
 
     def main_loop_busy(self):
@@ -111,7 +111,7 @@ class InfiniteTimeoutWorker(Worker):
 		    # Survived invariant pre-check! Prepare for full solving
                     #print "Dio SAT el invariante"
                     self.proc_inv = False
-		    self.stats_inv = self.current_event.stats # keep a ref to stats dict from 1st pass
+                    self.stats_inv = self.current_event.stats # keep a ref to stats dict from 1st pass
                     self.minisat = MinisatHotPipe(andrea.settings.paths['minisat_binary'])
                     self.tools = dict({'cnf': self.minisat})
                     self.handle_mission(self.current_task)
@@ -127,15 +127,14 @@ class InfiniteTimeoutWorker(Worker):
             (tid, ttype, tdata, infinite_timeout, curMax, level, timeout) = self.current_task
             elapsed = andrea.network.time() - self.tool_start_time
             if infinite_timeout and settings.debug:
-                print 'task %s with infinite timeout was solved in %s' % (tid, secs2human(elapsed, msecs=False))
+                print ('task %s with infinite timeout was solved in %s' % (tid, secs2human(elapsed, msecs=False)))
             
-	    if self.stats_inv:
-	        # If we kept a ref to a possible "first pass" stats dict, nest it within 2nd pass stats
-		# This is not pretty, but should at least preserve some data w/no impact on the master for now
-		# PEND: improve this; make the inv stats be always that, and full run stats always that.
-	        self.current_event.stats['stats_inv'] = self.stats_inv
-
-            msg_data = (self.current_task[0], # tid
+            if self.stats_inv:
+                # If we kept a ref to a possible "first pass" stats dict, nest it within 2nd pass stats
+            # This is not pretty, but should at least preserve some data w/no impact on the master for now
+            # PEND: improve this; make the inv stats be always that, and full run stats always that.
+                self.current_event.stats['stats_inv'] = self.stats_inv
+                msg_data = (self.current_task[0]), # tid
                 self.current_task[1], # ttype
                 self.current_event.max, # current max (variables set)
                 self.current_event.level, # current level (father, son, grandson, etc)
@@ -146,17 +145,16 @@ class InfiniteTimeoutWorker(Worker):
                 self.current_event.res, # main result ('SAT', 'ERROR', etc..)
                 self.current_event.etc['exitcode'],  # main exitcode or signal number
                 self.current_event.etc['exitstr'],  # ascii version of it, if available
-                self.current_event.stats, # dict w/task statistics and output
-            )
-            andrea.network.send(DoneMission(msg_data))
-            self.clear_state()
-        else:
-            elapsed = andrea.network.time() - self.tool_start_time
-            (tid, ttype, tdata, infinite_timeout, curMax, level, timeout) = self.current_task
-            if (not infinite_timeout) and (elapsed > self.timeout) and not self.proc_inv:
-                if not self.current_tool.aborting():
-                    self.current_event_kill = self.bb.add(KillEvent(self.current_task[0]))
-                    self.current_tool.abort()
+                self.current_event
+                self.timeout, # task timeoutneMission(msg_data))
+                self.clear_state()
+            else:
+                elapsed = andrea.network.time() - self.tool_start_time
+                (tid, ttype, tdata, infinite_timeout, curMax, level, timeout) = self.current_task
+                if (not infinite_timeout) and (elapsed > self.timeout) and not self.proc_inv:
+                    if not self.current_tool.aborting():
+                        self.current_event_kill = self.bb.add(KillEvent(self.current_task[0]))
+                        self.current_tool.abort()
     
     def handle_mission(self, task):
         tid, ttype, tdata, infinite_timeout, curMax, level, new_timeout = task

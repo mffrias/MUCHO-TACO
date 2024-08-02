@@ -103,7 +103,7 @@ def parseQF(string, relname=None):
     hit = pattern.search(string)
     message = 'error: could not find rel "' + relname + '" in base spec.'
     if not hit:
-        print message
+        print(message)
         assert hit 
     pos, end = hit.start(), hit.end()
     pattern = re.compile(r"(N\w+\s*->\s*\w+)")
@@ -138,6 +138,7 @@ class Alloy2Cnf:
 class MinisatHotPipe(Minisat220):
 
     def launch(self, header, cnf, count, res, cnf_path):
+        print("Entramos a launch de Hot pipe")
         if self.running:
             raise Exception("Can't launch while already running.")
         self.running = True
@@ -157,7 +158,9 @@ class MinisatHotPipe(Minisat220):
         #self.cnf_file.write(res)
         #self.cnf_file.close()
         # END DEBUG
+        print("Llegamos a Popen con las variables","self.exe_path]",self.exe_path,"self.out_file",self.out_file,"self.err_file" , self.err_file, " ")
         self.process = Popen([self.exe_path], stdin=PIPE, stdout=self.out_file, stderr=self.err_file, bufsize=-1)
+        print("pasamos popen")
         self.process.stdin.write(header)
         ti = andrea.network.time()
         cstring = cStringIO.StringIO(cnf)
@@ -182,20 +185,20 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Fa
     tool = Alloy2Cnf(java_home, als2cnf)
     
     if verbose: 
-        print "Converting als -> cnf ..."
+        print (")Converting als -> cnf ...")
     
     tool.launch(als_path)
     cnf = als_path + ".cnf"
     
     if verbose:
-        print "Converting als_inv -> cnf ..."
+        print ("Converting als_inv -> cnf ...")
     
     tool.launch(als_inv_path)
     cnf_inv = als_inv_path + ".cnf"
     tool = Alloy2Rels(java_home, als2rels)
 
     if verbose:
-        print "Generating rels ..."
+        print ("Generating rels ...")
 
     tool.launch(als_path)   
     print("tool was lunched. als path is: " , als_path)
@@ -205,30 +208,30 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Fa
     rels_inv_path = als_inv_path.replace(".inv", ".inv.rels")
 
     if verbose:
-        print "Generating rels sets ..."
+        print ("Generating rels sets ...")
     
     rels_sets = get_rels_sets(file2string(als_path), rels)
     rels_inv_sets = get_rels_sets(file2string(als_inv_path), rels)
     
     if verbose:
-        print "Stripping down restrictions ..."
+        print( "Stripping down restrictions ...")
     
     restrictions = strip_restrictions(als_path)
     
     if verbose:
-        print "Getting rels var limits ..."
+        print ("Getting rels var limits ...")
     
     rels_var_limits = get_rels_var_limits(rels_path, rels)
     rels_inv_var_limits = get_rels_var_limits(rels_inv_path, rels)
     
     if verbose:
-        print "Building tuple2val function ..."
+        print ("Building tuple2val function ...")
 
     tuple2val = get_tuple2val_function(restrictions, rels, scope, rels_var_limits, rels_sets)
     inv_tuple2val = get_tuple2val_function(restrictions, rels, scope, rels_inv_var_limits, rels_inv_sets)
 
     if verbose:
-        print "Done"
+        print ("Done")
     
     return (tuple2val, restrictions, file2string(cnf), file2string(cnf_inv), rels_sets, inv_tuple2val, rels_inv_sets)
 
@@ -293,14 +296,14 @@ def main():
     else:
         rels = sys.argv[4:]
         
-    print "ALS: " + als
-    print "INV: " + als_inv
-    print "SCOPE: " + str(scope)
-    print "RELS: " + str(rels)
+    print ("ALS: " + als)
+    print ("INV: " + als_inv)
+    print ("SCOPE: " + str(scope))
+    print ("RELS: " + str(rels))
     (tuple2val, restrictions, cnf, cnf_inv, rels_sets, inv_tuple2val, rels_inv_sets) = generate_artifacts(als, als_inv, scope, rels, settings)
     open("cotas-" + als, "w").write(restrictions)
     if als_child:
-        print "Generating new restrictions ..."
+        print ("Generating new restrictions ...")
         (header, count, res) = generate_new_cnf(cnf, open(als_child, "r"), rels_sets, tuple2val)
         filename = als_child + ".cnf"
         f = open(filename, "w")
@@ -308,7 +311,7 @@ def main():
         for i in range(0, count):
             f.write(cnf[i])
         f.write(res)
-        print "The new cnf has been generated in " + filename
+        print ("The new cnf has been generated in " + filename)
         if resolve:
             MinisatHotPipe("").launch(header, cnf, count, res, filename)
 

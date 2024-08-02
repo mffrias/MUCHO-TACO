@@ -80,11 +80,11 @@ class AlsPartitionerMaster(Master):
                 else:
                     time.sleep(1)
         except Exception as e:
-            print e
+            print (e)
 
     def start(self):
-        print "Hard limit for max TO is %.0f" % MAX_TIMEOUT
-        print "Launching thread init"
+        print ("Hard limit for max TO is %.0f" % MAX_TIMEOUT)
+        print ("Launching thread init")
         self.partitioner_thread = threading.Thread(target=self.partitioner, name='partitioner')
         self.partitioner_thread.start()
         Master.start(self)
@@ -125,16 +125,16 @@ class AlsPartitionerMaster(Master):
             andrea.network.receive()
         
         if self.seq_finished:
-            print "Se termino de procesar la tarea en secuencial antes que en paralelo"
+            print ("Se termino de procesar la tarea en secuencial antes que en paralelo")
         elif self.par_finished:
-            print "Se terminó de procesar la tarea en paralelo antes que en secuencial"
+            print ("Se terminó de procesar la tarea en paralelo antes que en secuencial")
     
     def mission_finished(self, worker, tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstats):
         Master.mission_finished(self, worker, tid, ttype, timeout, overhead, inv, curMax, level, tres, tecode, testr, tstats)
         if settings.autosensing_timeout and not infto and (tres == 'SAT' or tres == 'UNSAT' or tres == 'TIMEOUT'):
             self.total_st += float(timeout * 3) if tstats.get('solver.msecs', '0') == 0 else ((float(tstats.get('solver.msecs', '0')) + float(overhead)) / 1000.0)
-            self.finished_amm += 1
-	    newTimeout = float(45 * self.total_st / self.finished_amm)
+            self.finished_amm += 1 #ok here?
+            newTimeout = float(45 * self.total_st / self.finished_amm)
             andrea.settings.experiment['timeout'] = str(newTimeout) if newTimeout < MAX_TIMEOUT else str(MAX_TIMEOUT)
             #print "Timeout = %d" % timeout
             #print "New Timeout = " + str(4 * self.total_st / self.finished_amm)
@@ -191,7 +191,7 @@ class AlsPartitionerMaster(Master):
         self.tasks_idle.append((tid, ttype, tbody, infinite_timeout, curMax, level))
         self.total_produced += 1
         if infinite_timeout:
-            print 'file %s will be enqueued to be resolved with infinite timeout' % tid
+            print ('file %s will be enqueued to be resolved with infinite timeout' % tid)
 
     def assign_mission(self):
 
@@ -287,11 +287,11 @@ class AlsPartitionerMaster(Master):
             #print "Consumidos: " + str(self.total_processed)
             #print "ST/PT: " + str(st/pt)
             #print "Alpha: " + str(alpha)
-            print "Upper: " + str(self.upper)
+            print ("Upper: " + str(self.upper))
             #print "Lower: " + str(self.lower)
-            print "To Part: " + str(len(self.partition_tasks))
-            print "Will Part: " + str(amm)
-            print "AVG Parts: " + str(self.upper / amm)
+            print ("To Part: " + str(len(self.partition_tasks)))
+            print ("Will Part: " + str(amm))
+            print ("AVG Parts: " + str(self.upper / amm))
         
         aux = ExtendedQueue()
         max_sum = 0
@@ -315,7 +315,7 @@ class AlsPartitionerMaster(Master):
         
             if event.partitions == 1 or event.partitions == 0:
                 if settings.debug:
-                    print 'file %s will be enqueued to be resolved with infinite timeout' % os.path.basename(event.file_path)
+                    print ('file %s will be enqueued to be resolved with infinite timeout' % os.path.basename(event.file_path))
                 tid = os.path.basename(event.file_path)
                 ext = os.path.splitext(tid)[1]
                 #ttype = ext.lstrip('.')
@@ -332,7 +332,7 @@ class AlsPartitionerMaster(Master):
             else:
                 res = 1
                 event.finish()
-                print event
+                print (event)
         
         #print "self.upper = %d, upToSum = %d" % (self.upper, upToSum) #DEBUG
 
