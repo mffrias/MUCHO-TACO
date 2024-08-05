@@ -38,8 +38,8 @@ def main():
     me.cleanup()
 
     if andrea.network.map.am_master():
-        print '\n', 'viki', VIKI_VERSION, \
-          'closing after', secs2human_older(andrea.network.time())
+        print ('\n', 'viki', VIKI_VERSION, \
+          'closing after', secs2human_older(andrea.network.time()))
 
 def parse_cmd_line():
 
@@ -56,6 +56,8 @@ def parse_cmd_line():
              (('-p', '--process-map'), show_process_map))
 
     for switch, function in modes:
+        print('esto es swithc ', switch , ' || ')
+        # print('esto es argv ', argv, ' ||')
         if sys.argv[1].startswith(switch):
             if andrea.network.map.am_master():
                 if function():
@@ -100,21 +102,21 @@ def parse_cmd_line():
         return conf_path
 
 def show_process_map():
-    print ''
+    print ('')
     andrea.network.map.write_table(sys.stdout)
-    print ''
+    print ('')
     return True
 
 def show_usage():
-    print '\nPlease specify a configuration file, or\n'
-    print '   -v, --version    for version information'
-    print '   -h, --help       if you need some help'
-    print '   -m, --map        to see the process map'
-    print ''
+    print ('\nPlease specify a configuration file, or\n')
+    print ('   -v, --version    for version information')
+    print ('   -h, --help       if you need some help')
+    print ('   -m, --map        to see the process map')
+    print ('')
     return True
 
 def show_version():
-    print VIKI_LOGO
+    print (VIKI_LOGO)
     return True
 
 VIKI_VERSION = '0.1.2 (nueva con mejor log + distr + autoTO, fix distr + polished stdout)'
