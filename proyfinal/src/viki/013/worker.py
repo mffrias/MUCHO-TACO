@@ -171,7 +171,7 @@ class InfiniteTimeoutWorker(Worker):
              
         #handler = getattr(self, 'handle_mission_' + ttype)
         #handler(tid, tdata)
-        #C
+        #Cd
     
     def handler_res(self, tid, tdata):
         ti = andrea.network.time()
