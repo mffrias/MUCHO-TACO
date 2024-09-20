@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# encoding: utf-8
-"""
-settings.py
-
-Created by Guido Marucci Blas on 2011-01-29.
-Copyright (c) 2011 __MyCompanyName__. All rights reserved.
-"""
-
 import sys
 import os
 

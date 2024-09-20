@@ -1,4 +1,4 @@
-import os
+import os.path
 import datetime
 
 
@@ -8,16 +8,20 @@ def secs2human(s, msecs=True):
     """
     if msecs:
         ms = int((s - int(s)) * 1000)
-    s = int(s)
-    while s >= 24*60*60: s -= 24*60*60
-    h = s / (60*60)
-    s -= h*60*60
-    m = s / 60
-    s -= m*60
-    if msecs:
-        return '%s.%03d' % ( str(datetime.time(h, m, s)), ms )
     else:
-        return str(datetime.time(h, m, s))
+        ms = 0
+    s = int(s)
+    while s >= 24*60*60: 
+        s -= 24*60*60
+    h = int(s / (60*60))
+    s -= h*60*60
+    m = int(s / 60)
+    s -= m*60
+    print("Debug-mfrias4 utils.py line 20, h = ", h, " m = ", m, "s = ", s, "ms = ", ms)
+    if msecs:
+        return '%s.%03d' % ( str(datetime.time(int(h), int(m), int(s))), ms )
+    else:
+        return str( datetime.time(int(h), int(m), int(s)) )
 
 
 def secs2human_old(seconds, use_msecs=False):
@@ -84,9 +88,17 @@ def list_all_files(path, exts):
     given extensions; return a list of matches. If path is a regular
     file (not a directory), it will be the only candidate for a match.
     """
+
+    print ("Debug-mfrias4: utils.py line 88. path = ", path);
+    print ("Debug-mfrias4: utils.py line 89. exts = ", exts);
+    print ("Debug-mfrias4: utils.py line 90. os.path.isdir(concretepath) = ", os.path.isdir('/Users/mpiuser/Desktop/MUCHO-TACO-CODE/proyfinal/src/viki/013/andrea/tasks'));
+    print ("Debug-mfrias4: utils.py line 91. repr(path) = ", repr(path))
+
     if os.path.isfile(path):
+        print ("Debug-mfrias4: utils.py line 92. Entered if.")
         return [path] if path.endswith(exts) else []
     elif os.path.isdir(path):
+        print ("Debug-mfrias4: utils.py line 92. Entered elsif.")
         result = []
         for (dir, subdirs, files) in os.walk(path):
             result += map(lambda f: dir + "/" + f,
@@ -132,11 +144,12 @@ class RoundRobin:
 
 
 class Tabulator:
-
+    
     def __init__(self, output, titles, widths, aligns):
+        print("widths :", widths, " aligns :", aligns)
         self.num_cols = len(aligns)
         if not (self.num_cols == len(widths)):
-            raise Exception, "Widths and aligns must have equal length."
+            raise Exception("Widths and aligns must have equal length.")
             # And each elem of titles same as well, and same as that one.
         self.titles = titles
         self.widths = widths
@@ -157,6 +170,7 @@ class Tabulator:
         self.output.flush()
 
     def add_line(self):
+        print("Debug-mfrias4 utils.py line 169, add_line with output = ", self.output)
         self.output.write(self.make_hline())
 
     def make_row(self, values):

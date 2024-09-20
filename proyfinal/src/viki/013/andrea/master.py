@@ -1,14 +1,14 @@
-import settings
-import network
+import andrea.settings
+import andrea.network
 import csv
 import os
 
-from process import Process
+from andrea.process import Process
 from utils   import write_file
-from network import WantMission, HaveMission, DoneMission
-from network import ExitToShell
+from andrea.network import WantMission, HaveMission, DoneMission
+from andrea.network import ExitToShell
 from utils   import RoundRobin, list_all_files, read_file
-from events  import Event, WeatherEvent
+from andrea.events  import Event, WeatherEvent
 from pprint  import pformat
 from time    import sleep
 
@@ -16,7 +16,7 @@ from time    import sleep
 class Master(Process):
 
     def start(self):
-        print("we enter to START function")
+        print("Debug-mfrias4, andrea.master.py line 19. Just entered start")
         self.tasks_idle = []
         self.tasks_busy = set()
         self.tasks_done = set()
@@ -25,22 +25,23 @@ class Master(Process):
 
         self.donetask_outcomes = {'SAT': 0, 'UNSAT': 0, 'TIMEOUT': 0, 'MEMOUT': 0, 'ERROR': 0}
 
-        self.tasklog_file = open(settings.outdir_path('andrea.tlog.csv'), 'w')
+        self.tasklog_file = open(andrea.settings.outdir_path('andrea.tlog.csv'), 'w')
         self.tasklog_file.write('#task_id,task_type,worker_rank,timeout,overhead,inv,max,level,outcome,rc_num,rc_str,tot_msec_solv,tot_msec_task\n')
         self.tasklog = csv.writer(self.tasklog_file)
+        print("Debug-mfrias4, andrea.master.py line 31. tasklog = ", self.tasklog_file)
 
-        self.weather_reports = settings.logging['weather_reports']
+        self.weather_reports = andrea.settings.logging['weather_reports']
 
         if self.weather_reports: # Force wrep before populating task queue
-            self.weather_every = float(settings.logging['weather_every'])
+            self.weather_every = float(andrea.settings.logging['weather_every'])
             self.bb.add(WeatherEvent('preinit', self.get_stats()))
-            self.last_weather = network.time()
-        print("before populate tq")
+            self.last_weather = andrea.network.time()
+        print("Debug-mfrias4, andrea.master.py line 39. Before populating task queue")
         self.populate_task_queue() # Load all task files into main memory (!)
-        print("after ptq")
+        print("Debug-mfrias4, andrea.master.py line 41. After populating task queue")
         if self.weather_reports: # Force wrep when ready to start working
             self.bb.add(WeatherEvent('initial', self.get_stats()))
-            self.last_weather = network.time()
+            self.last_weather = andrea.network.time()
         print("")
         self.main_loop() # Run main event loop until done
 
@@ -54,18 +55,22 @@ class Master(Process):
 
     def main_loop(self):
 
+        print("Debug-mfrias4: andrea.master.py line 57. Entered main_loop. I am worker ", self.my_rank)
+
         while not self.finished:
 
-            if network.msg_waiting():
+            if andrea.network.msg_waiting():
                 print("message waiting")
-                self.handle_message(network.receive())
+                self.handle_message(andrea.network.receive())
                 print("message waiting OUT")
                 
 
+            print("Debug-mfrias4: andrea.master.py line 67. self.workers_idle = ", self.workers_idle)
+            print("Debug-mfrias4: andrea.master.py line 68. self.tasks_idle = ", self.tasks_idle)
             if self.workers_idle and self.tasks_idle:
                 print("Sent ")
                 worker, task = self.assign_mission()
-                network.send(HaveMission(worker, task))
+                andrea.network.send(HaveMission(worker, task))
                 print("Sent Done")
                 
             if not (self.tasks_idle or self.workers_busy):
@@ -73,7 +78,7 @@ class Master(Process):
                 print("DONE WITH ALL TASKS")
 
             if self.weather_reports:
-                current_time = network.time()
+                current_time = andrea.network.time()
                 if current_time - self.last_weather > self.weather_every:
                     self.last_weather = current_time
                     self.bb.add(WeatherEvent('update', self.get_stats()))
@@ -82,9 +87,16 @@ class Master(Process):
 
 
     def handle_message(self, msg):
-        if isinstance(msg, WantMission):
+        print("Debug-mfrias4: andrea.master.py line 90. msg = ", msg, " I am worker ", self.my_rank)
+        print("Debug-mfrias4: andrea.master.py line 91. msg.src = ", msg.src)
+        print("Debug-mfrias4: andrea.master.py line 92. msg class = ", msg.__class__.__name__)
+        print("Debug-mfrias4: andrea.master.py line 93. isinstance(msg, WantMission) = ", isinstance(msg, WantMission))
+        print("Debug-mfrias4: andrea.master.py line 94. msg.__class__.__name__ = ", msg.__class__.__name__)
+        if msg.__class__.__name__ == WantMission.__name__:
+            print("Debug-mfrias4, andrea.master.py line 96. msg class is WantMission. Requested by Worker ", msg.src)
             self.mission_requested(msg.src)
-        elif isinstance(msg, DoneMission):
+        elif msg.__class__.__name__ == DoneMission.__name__:
+            print("Debug-mfrias4, andrea.master.py line 99. msg class is DoneMission and msg.body = ", msg.body)
             tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstatdict = msg.body
             self.mission_finished(msg.src, tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstatdict)
         else:
@@ -92,7 +104,7 @@ class Master(Process):
 
 
     def mission_requested(self, worker):
-        
+        print("Debug-mfrias4: andrea.master.py line 107. mission_requested. I am worker ", self.my_rank)
         """
         Event handler: called when idle worker announces WANT_MISSION.
         
@@ -102,11 +114,13 @@ class Master(Process):
         """
         
         if worker in self.workers_busy:
-            raise Exception("Got WANT_MISSION from busy worker!?")
+            print("Debug-mfrias4 andrea.master.py line 116. I am self.my_rank =", self.my_rank, " and got WANT_MISSION from busy worker ", worker)
+            raise Exception("Got WANT_MISSION from already busy worker!?")
         if worker in self.workers_idle:
             raise Exception("Got WANT_MISSION from already idle worker!?")
 
         self.workers_idle.append(worker)
+        print("Debug-mfrias4, andrea.master.py line 119, worker ", worker, " idle waiting for mission")
 
 
     def assign_mission(self):
@@ -117,6 +131,8 @@ class Master(Process):
         Returns (worker_id, (tid, ttype, tdata)) tuple.
         """
         
+        print("Debug-mfrias4: andrea.master.py line 126. mission assigned. I am worker ", self.my_rank)
+
         tid, ttype, tdata = self.tasks_idle.pop(0)
         self.tasks_busy.add(tid)
         worker = self.workers_idle.pop(0)
@@ -153,6 +169,8 @@ class Master(Process):
         # Remove worker from workers_busy.
         # Do not add to workers_idle yet! (until WANT_MISSION rcvd)
         
+        print("Debug-mfrias4: andrea.master.py line 169. Mission_finished. I am worker ", self.my_rank)
+
         if worker in self.workers_busy:
             if self.workers_busy[worker] == tid:
                 del self.workers_busy[worker]
@@ -171,12 +189,12 @@ class Master(Process):
         # write full output, if present. to task.foo.out
         # and remove it from the dict
         if tstats and tstats.get('task.output'):
-            write_file(settings.outdir_path(tid + '.out'), tstats['task.output'])
+            write_file(andrea.settings.outdir_path(tid + '.out'), tstats['task.output'])
             del tstats['task.output']
 
         # write rest of stats, if any, to task.foo.dat
         if tstats and len(tstats) > 0:
-            write_file(settings.outdir_path(tid + '.dat'), pformat(tstats) + '\n')
+            write_file(andrea.settings.outdir_path(tid + '.dat'), pformat(tstats) + '\n')
     
         # write a row to the tasklog: remove ext from tid ...
         if tid.endswith('.als'):
@@ -212,10 +230,12 @@ class Master(Process):
 
 
     def populate_task_queue(self):
+        print("Debug-mfrias4: andrea.master.py line 230. populate_task_queue. I am worker ", self.my_rank)
         queue_create_phase = self.bb.add(Event('main', 'queue.create'))
-        task_paths = list_all_files(settings.experiment['tasks'], ('.als', '.cnf'))
+        task_paths = list_all_files(andrea.settings.experiment['tasks'], ('.als', '.cnf'))
         #print task_paths
         for task_path in task_paths:
+            print("Debug-mfrias4: andrea.master.py line 238. populate_task_queue. task_path is ", task_path)
             tid = os.path.basename(task_path)
             ext = os.path.splitext(tid)[1]
             ttype = ext.lstrip('.')
@@ -232,6 +252,6 @@ class Master(Process):
 
     def send_exit_messages(self):
         "Send an EXIT message to every process except our own."
-        for rank in (network.map.ranks() - set([self.my_rank])):
-            network.send(ExitToShell(rank))
+        for rank in (andrea.network.map.ranks() - set([self.my_rank])):
+            andrea.network.send(ExitToShell(rank))
             

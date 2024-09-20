@@ -15,7 +15,7 @@ from subprocess import Popen, PIPE, STDOUT
 import re
 from andrea.tools import Minisat220, Abort
 import andrea
-import cStringIO
+import io
 
 def strip_restrictions(filename):
     als = file2string(filename)
@@ -138,7 +138,7 @@ class Alloy2Cnf:
 class MinisatHotPipe(Minisat220):
 
     def launch(self, header, cnf, count, res, cnf_path):
-        print("Entramos a launch de Hot pipe")
+        print("Debug-mfrias4, als2cnfmodutils.py line 141. Minisat to be launched")
         if self.running:
             raise Exception("Can't launch while already running.")
         self.running = True
@@ -159,11 +159,11 @@ class MinisatHotPipe(Minisat220):
         #self.cnf_file.close()
         # END DEBUG
         print("Llegamos a Popen con las variables","self.exe_path]",self.exe_path,"self.out_file",self.out_file,"self.err_file" , self.err_file, " ")
-        self.process = Popen([self.exe_path], stdin=PIPE, stdout=self.out_file, stderr=self.err_file, bufsize=-1)
+        self.process = Popen([self.exe_path], stdin=PIPE, stdout=self.out_file, stderr=self.err_file, bufsize=-1, text=True)
         print("pasamos popen")
         self.process.stdin.write(header)
         ti = andrea.network.time()
-        cstring = cStringIO.StringIO(cnf)
+        cstring = io.StringIO(cnf)
         for line in cstring:
             if line[0] != 'p':
                 self.process.stdin.write(line)
@@ -177,7 +177,8 @@ class MinisatHotPipe(Minisat220):
 #   mini_als: the part of the als that contains the restricctions
 #   cnf: als->cnf.
 #   cnf_inv: als_inv ->cnf.
-def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=False):
+def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=True):
+    print("Debug-mfrias4, als2cnfmodutils.py line 181. Entering generate_artifacts. Verbose = True")
     java_home = settings['java_home']
     als2cnf = settings['als2cnf']
     als2rels = settings['als2rels']
@@ -185,7 +186,7 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Fa
     tool = Alloy2Cnf(java_home, als2cnf)
     
     if verbose: 
-        print (")Converting als -> cnf ...")
+        print ("Converting als -> cnf ...")
     
     tool.launch(als_path)
     cnf = als_path + ".cnf"
@@ -236,10 +237,10 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Fa
     return (tuple2val, restrictions, file2string(cnf), file2string(cnf_inv), rels_sets, inv_tuple2val, rels_inv_sets)
 
 def generate_cnf_restrictions(new_als_restrictions_file, rels_sets, tuple2val):
-    if type(new_als_restrictions_file) == file:
-        new_als_restrictions = file2string(new_als_restrictions_file)
-    else:
-        new_als_restrictions = new_als_restrictions_file
+ #   if type(new_als_restrictions_file) == file:
+ #       new_als_restrictions = file2string(new_als_restrictions_file)
+ #   else:
+    new_als_restrictions = new_als_restrictions_file
     new_rels_sets = get_rels_sets(new_als_restrictions, rels_sets.keys());
     
     restrictions = ""
@@ -253,10 +254,10 @@ def generate_cnf_restrictions(new_als_restrictions_file, rels_sets, tuple2val):
     return (restrictions, count)
 
 def file2string(filename):
-    if type(filename) == file:
-        f = filename
-    else: 
-        f = open(filename, "r")
+#    if type(filename) == file:
+#        f = filename
+#    else: 
+    f = open(filename, "r")
         
     data = ""
     for line in f.readlines():

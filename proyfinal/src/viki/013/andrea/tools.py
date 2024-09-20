@@ -47,12 +47,14 @@ class ExternalToolDriver:
     """
 
     def __init__(self, exe_path):
+        print("Debug-mfrias4 tools.py line 50. Entered constructor ExternalToolDriver")
         self.exe_path = exe_path
         self.process = None
         self.running = False
         self.abort_status = Abort.NOT_CALLED
         
     def launch(self, args=None, out_path=None):
+        print("Debug-mfrias4 tools.py line 57. Entered launch")
         if self.running:
             raise Exception("Can't launch while already running.")
         self.running = True
@@ -60,7 +62,9 @@ class ExternalToolDriver:
         self.out_file = open(out_path, 'w') if out_path else None
         cmd = self.make_command_line(args if args else [])
         #print "\n" + ' '.join(cmd) + "\n"
+        print("Debug-mfrias4 tools.py line 65. About to Popen")
         self.process = Popen(cmd, stdout=self.out_file, stderr=self.out_file)
+        print("Debug-mfrias4 tools.py line 67. After Popen")
 
     def abort(self, signal=SIGINT):
         if not self.running:
@@ -75,7 +79,9 @@ class ExternalToolDriver:
         return self.abort_status == Abort.IN_PROGRESS
 
     def finished(self):
+        print("Debug-mfrias4 tools.py line 82. Entering finished")
         if self.process.poll() == None: # this may have side effects!
+            print("Debug-mfrias4 tools.py line 84. Entered finished but the answer was NO")
             return False                # if True, reaps & sets retcode
         if self.out_file:
             self.out_file.close()
@@ -84,9 +90,11 @@ class ExternalToolDriver:
         self.running = False
         self.returncode = self.process.returncode
         self.after_having_finished()
+        print("Debug-mfrias4 tools.py line 93. Entered finished and answer was YES")
         return True
 
     def finished_via(self):
+        print("Debug-mfrias4 tools.py line 95. Entering finished_via")
         if self.running or self.abort_status == Abort.IN_PROGRESS:
             raise Exception('Perhaps you should try exited() first.')
         # abort() was either completed or not called at all
@@ -107,6 +115,7 @@ class ExternalToolDriver:
             return Reason.KILL_OK
 
     def _exited_via(self):
+        print("Debug-mfrias4 tools.py line 116. in call of _exited_via with return code = ", self.returncode)
         if self.returncode == 0:
             return Reason.EXIT_OK
         else:
@@ -147,6 +156,7 @@ class JavaTool(ExternalToolDriver):
         return cmd
 
     def after_having_finished(self):
+        print("Debug-mfrias4 tools.py line 159. Entered after_having_finished")
         self.output = read_file(self.out_path)
         self.stats  = dict()
         self.stats['task.output'] = self.output
@@ -154,7 +164,9 @@ class JavaTool(ExternalToolDriver):
             line = line.strip()
             if line.startswith('* '):
             # Parse and strip the key : value pair
+
                 key, val = map(str.strip, line[2:].split(': ', 1))
+                print("Debug-mfrias4, tools.py line 166. key = ", key, "value = ", val)
                 self.stats[key] = val
 
 
@@ -235,10 +247,12 @@ class Minisat220(ExternalToolDriver):
         return [self.exe_path] + args
 
     def after_having_finished(self):
+        print("Debug-mfrias4 in tools.py line 245 minisat after_having_finished")
         self.output = read_file(self.out_path)
         self.stats  = dict()
         self.stats['task.output'] = self.output
         for line in self.output.splitlines():
+            print("Debug-mfrias4 in tools.py line 252. Processing line = ", line)
             line = line.strip()
             if ' : ' in line:
                 # Parse and strip the key : value pair
@@ -272,14 +286,18 @@ class Minisat220(ExternalToolDriver):
 
     def _exited_via(self):
         if self.returncode in Minisat220.MAGIC_NUMBERS:
+            print("Debug-mfrias4 in tools.py line 286   x minisat exited_via EXIT_OK")
             return Reason.EXIT_OK
         else:
+            print("Debug-mfrias4 in tools.py line 286 minisat exited_via EXIT_KO")
             return Reason.EXIT_KO
 
     def veredict(self):
+        print("Debug-mfrias4 in tools.py line 288 minisat veredict")
         if self.undefined:
             raise Exception('No confirmed veredict can be returned.')
         else:
+            print("Debug-mfrias4 in tools.py line 292 minisat veredict = ", self.returncode)
             return self.returncode == Minisat220.MAGIC_SAT  # XOR holds here
 
 
@@ -305,6 +323,7 @@ class HackyPipe:
         self.abort_status = Abort.NOT_CALLED
         
     def launch(self, args=None, out_path=None):
+        print("Debug-mfrias4 tools.py line 326. Entering launch")
         if self.running:
             raise Exception("Can't launch while already running.")
         self.running = True

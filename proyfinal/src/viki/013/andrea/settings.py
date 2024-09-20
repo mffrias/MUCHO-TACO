@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 from re import compile as compile_regex
 from os import path, pathsep
 
@@ -19,7 +19,7 @@ def read(conf_path):
     This should be much more flexible and w/better error checking...
     """
 
-    conf = ConfigParser.ConfigParser()
+    conf = configparser.ConfigParser()
     conf_path = path.abspath(conf_path) # normalize/absolutize this path
     conf.read(conf_path) # and parse the .conf file
 

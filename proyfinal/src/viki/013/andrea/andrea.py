@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-import settings
+import andrea.settings
 import network
 import sys, os
 
@@ -16,6 +14,7 @@ from datetime import datetime
 
 def main():
 
+    print("Debug-mfrias4: Entering andrea.py line 17, method main")
     network.map = network.ProcessMap()
 
     config_path = parse_cmd_line()
@@ -25,61 +24,77 @@ def main():
     network.sync_zero_time()
     sleep(network.map.my_rank * 0.01)
 
-    create_output_file(config_path, show_welcome_banner, config_path, ANDREA_LOGO)
+    print("Debug-mfrias4: andrea.py line 27, just before invoking create_output_file. network.map = ", network.map)
+
+    create_output_file(network.map, config_path, show_welcome_banner, config_path, ANDREA_LOGO)
+
+    print("Debug-mfrias4: andrea.py line 27", config_path)
 
     role2class = dict({Role.M: Master, Role.W: Worker})
 
     my_class = role2class[network.map.my_role]
-    me = my_class()
+    me = my_class(network)
     me.start()
     me.cleanup()
 
     if network.map.am_master():
-        print '\n', 'andrea', ANDREA_VERSION, \
-          'closing bolich after', secs2human_older(network.time())
+        print('\n', 'andrea', ANDREA_VERSION, \
+          'closing bolich after', secs2human_older(network.time()))
     
-def show_welcome_banner(config_path, app_logo):
+def show_welcome_banner(andrea_network_map, config_path, app_logo):
+    print(config_path)
     # Show a welcome message
     takestr = '(take %s of %s) on %d CPUs' % \
-      (settings.experiment['take'], settings.experiment['id'],
-       network.map.comm_size)
-    print 'launching', settings.experiment['full_id'], takestr
-    print app_logo
-    print '      date:   ', datetime.now().isoformat()
-    print '  hardware:   ', settings.experiment.get('hardware', 'unspecified')
-    print '      goal:   ', settings.experiment.get('goal', 'unspecified')
-    print '  comments:   ', settings.experiment.get('comments', 'none')
-    print '\n'
-    print ' conf_file:   ', config_path
-    print ' tasks_dir:   ', os.path.abspath(settings.experiment['tasks'])
-    print 'output_dir:   ', settings.outdir_path()
-    print '   conflog:   ', settings.outdir_path('andrea.conf')
-    print '   tasklog:   ', settings.outdir_path('andrea.tlog.csv')
-    print '\n'
+      (andrea.settings.experiment['take'], andrea.settings.experiment['id'],
+       andrea_network_map.comm_size)
+    print('launching', andrea.settings.experiment['full_id'], takestr)
+    print(app_logo)
+    print('      date:   ', datetime.now().isoformat())
+    print('  hardware:   ', andrea.settings.experiment.get('hardware', 'unspecified'))
+    print('      goal:   ', andrea.settings.experiment.get('goal', 'unspecified'))
+    print('  comments:   ', andrea.settings.experiment.get('comments', 'none'))
+    print('\n')
+    print(' conf_file:   ', config_path)
+    print(' tasks_dir:   ', os.path.abspath(andrea.settings.experiment['tasks']))
+    print('output_dir:   ', andrea.settings.outdir_path())
+    print('   conflog:   ', andrea.settings.outdir_path('andrea.conf'))
+    print('   tasklog:   ', andrea.settings.outdir_path('andrea.tlog.csv'))
+    print('\n')
     
-def create_output_file(config_path, on_success, *args):
+def create_output_file(andrea_network_map, config_path, on_success, *args):
     had_to_create = False;
-    if network.map.am_master():
-        had_to_create = ensure_directory(settings.outdir_path())
+
+    print("Debug-mfrias4: andrea.py line 67: networkMap = ", andrea_network_map, "    on_success = ", on_success, "*args = ", *args)
+
+    if andrea_network_map.am_master():
+
+        print("Debug-mfrias4: andrea.py line 71: am_master = true. Mu rank = ", andrea_network_map.my_rank)
+
+        had_to_create = ensure_directory(andrea.settings.outdir_path())
         if had_to_create:
             # Write process map file to the results dir
-            mapfile = open(settings.outdir_path('andrea.pmap'), 'w')
-            network.map.write_table(mapfile)
+            mapfile = open(andrea.settings.outdir_path('andrea.pmap'), 'w')
+            andrea_network_map.write_table(mapfile)
             mapfile.close()
             # Store a copy of the .conf file in the results dir
             # (unless the given one is there already!)
-            if config_path != settings.outdir_path('andrea.conf'):
-                copyfile(config_path, settings.outdir_path('andrea.conf'))
-        	on_success(*args)
+            if config_path != andrea.settings.outdir_path('andrea.conf'):
+                copyfile(config_path, andrea.settings.outdir_path('andrea.conf'))
+                print("Debug-mfrias4: andrea.py line 83 args: ", args)
+                print("Debug-mfrias4: andrea.py line 83 args[0]: ", args[0])
+                print("Debug-mfrias4: andrea.py line 83 args[1]: ", args[1])
+                tmp_args = andrea_network_map, args[0], args[1]
+                print("Debug-mfrias4: andrea.py line 87 tmp_args: ", tmp_args)
+                on_success(*tmp_args)
         else:
-            print '\nRefusing to clobber existing outdir (for safety).\n'
-            print 'Please do any of the following:'
-            print '  a) rename or remove previous output directory,'
-            print '    ', settings.outdir_path()
-            print '  b) change expID and/or increment takeID in your config file,'
-            print '    ', config_path
-            print '  c) or add "allow_clobbering: Yes" to your config file.'
-            print ''
+            print('\nRefusing to clobber existing outdir (for safety).\n')
+            print('Please do any of the following:')
+            print('  a) rename or remove previous output directory,')
+            print('    ', andrea.settings.outdir_path())
+            print('  b) change expID and/or increment takeID in your config file,')
+            print('    ', config_path)
+            print('  c) or add "allow_clobbering: Yes" to your config file.')
+            print('')
             exit(2) # revisar esto	
     
 def parse_cmd_line():
@@ -109,22 +124,22 @@ def parse_cmd_line():
 
 
 def show_process_map():
-    print ''
+    print('')
     network.map.write_table(sys.stdout)
-    print ''
+    print('')
 
 def show_usage():
-    print '\nPlease specify a configuration file, or\n'
-    print '   -v, --version    for version information'
-    print '   -h, --help       if you need some help'
-    print '   -m, --map        to see the process map'
-    print ''
+    print ('\nPlease specify a configuration file, or\n')
+    print ('   -v, --version    for version information')
+    print ('   -h, --help       if you need some help')
+    print ('   -m, --map        to see the process map')
+    print ('')
 
 def show_help():
-    print '\nusage:\n\n    ', 'mpiexec -np NUM_CORES python andrea.py CONF_FILE\n'
+    print ('\nusage:\n\n    ', 'mpiexec -np NUM_CORES python andrea.py CONF_FILE\n')
 
 def show_version():
-    print ANDREA_LOGO
+    print (ANDREA_LOGO)
 
 
 ANDREA_VERSION = '1.4.1b6 (lo-fat, hi-doc)'

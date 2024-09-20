@@ -1,0 +1,23 @@
+Reading from standard input... Use '--help' for help.
+============================[ Problem Statistics ]=============================
+|                                                                             |
+|  Number of variables:         69608                                         |
+|  Number of clauses:          118081                                         |
+|  Parse time:                   0.02 s                                       |
+|                                                                             |
+============================[ Search Statistics ]==============================
+| Conflicts |          ORIGINAL         |          LEARNT          | Progress |
+|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |
+===============================================================================
+|       100 |   58288    86793   214821 |    31824       92      8 | 16.262 % |
+|       250 |   58288    85480   211540 |    35006      230     10 | 16.262 % |
+===============================================================================
+restarts              : 3
+conflicts             : 378            (6564 /sec)
+decisions             : 40280          (0.00 % random) (699488 /sec)
+propagations          : 504714         (8764678 /sec)
+conflict literals     : 4102           (13.35 % deleted)
+Memory used           : 15.98 MB
+CPU time              : 0.057585 s
+
+UNSATISFIABLE

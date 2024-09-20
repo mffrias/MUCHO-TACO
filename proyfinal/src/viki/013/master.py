@@ -34,6 +34,7 @@ MAX_TIMEOUT = 180.0
 class AlsPartitionerMaster(Master):
     
     def __init__(self):
+        print("Debug-mfrias4, master.py line 37. Entering init AlsPartitionerMaster")
         Master.__init__(self)
         self.partition_tasks = ExtendedQueue()
         self.run = True
@@ -54,19 +55,26 @@ class AlsPartitionerMaster(Master):
         random.seed()
         
     def cleanup(self):
+        print("Debug-mfrias4, master.py line 58. Entering cleanup. ")
         self.run = False
         self.partitioner_thread.join()
         Master.cleanup(self)
     
     def partitioner(self):
+        print("Debug-mfrias4, master.py line 64. Entering partitioner")
+
         result = 1
         try:
             secs = 1.1
             while self.run:
+                print("Debug-mfrias4, master.py line 70. Entered while loop")
                 if self.partition_tasks:
+                    print("Debug-mfrias4, master.py line 72. Entered if")
                     #print "Starting a partition work..."
                     self.partitioning = True
+                    print("Debug-mfrias4, master.py line 73. Before partition")
                     result = self.partitionate()
+                    print("Debug-mfrias4, master.py line 75. After partitionate(). result = ", result)
                     self.partitioning= False
                     if result == -1:
                         secs = secs * 1.1
@@ -76,27 +84,29 @@ class AlsPartitionerMaster(Master):
                         time.sleep(0.5)
                     else:
                         secs = 1.1
-                    #print "The partition was made."
+                    print("Debug-mfrias4, master.py line 87. After partition was completed")                    
                 else:
                     time.sleep(1)
         except Exception as e:
             print (e)
 
     def start(self):
-        print ("Hard limit for max TO is %.0f" % MAX_TIMEOUT)
-        print ("Launching thread init")
+
+        print ("Debug-mfrias4, master.py line 95 Hard limit for max TO is %.0f" % MAX_TIMEOUT)
+        print ("Debug-mfrias4, master.py line 96 Launching thread init")
         self.partitioner_thread = threading.Thread(target=self.partitioner, name='partitioner')
         self.partitioner_thread.start()
         Master.start(self)
         
     def main_loop(self):
-        print("starting main loop")
+        print("Debug-mfrias4, master.py line 102. Starting main loop")
         auxQueue = ExtendedQueue()
         while self.tasks_idle:
             auxQueue.append(self.tasks_idle.pop(0))
         self.tasks_idle = auxQueue
         
-        self.total_produced = len(self.tasks_idle)    
+        self.total_produced = len(self.tasks_idle)
+        print("Debug-mfrias4, master.py line 109. self.total_produced = ", len(self.tasks_idle))   
 
         while not self.finished:
 
@@ -107,13 +117,16 @@ class AlsPartitionerMaster(Master):
             if self.workers_idle and self.tasks_idle:
                 print("assigning mission")
                 worker, task = self.assign_mission()
+                print("Debug-mfrias4, master.py line 119. After assign mission")
                 andrea.network.send(HaveMission(worker, task))
+                print("Debug-mfrias4, master.py line 121. After send(HaveMission)")
 
             if not (self.tasks_idle or self.workers_busy or self.partition_tasks or self.partitioning):
                 print("finishing tasks")
                 self.finished = True
 
             if self.weather_reports:
+                print("Debug-mfrias4, master.py line 128. Entering weather_reports")
                 current_time = andrea.network.time()
                 if current_time - self.last_weather > self.weather_every:
                     self.last_weather = current_time
@@ -130,6 +143,7 @@ class AlsPartitionerMaster(Master):
             print ("Se terminó de procesar la tarea en paralelo antes que en secuencial")
     
     def mission_finished(self, worker, tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstats):
+        print("Debug-mfrias4, master.py line 141, entering mission_finished")
         Master.mission_finished(self, worker, tid, ttype, timeout, overhead, inv, curMax, level, tres, tecode, testr, tstats)
         if settings.autosensing_timeout and not infto and (tres == 'SAT' or tres == 'UNSAT' or tres == 'TIMEOUT'):
             self.total_st += float(timeout * 3) if tstats.get('solver.msecs', '0') == 0 else ((float(tstats.get('solver.msecs', '0')) + float(overhead)) / 1000.0)
@@ -158,13 +172,13 @@ class AlsPartitionerMaster(Master):
             self.seq_finished = True
             self.finished = True
         # versión más robusta que no asume nada especial
-        elif tres != 'MEMOUT' and tres != 'ERROR' and len(self.tasks_busy) is 1 and len(self.tasks_idle) is 0:
+        elif tres != 'MEMOUT' and tres != 'ERROR' and len(self.tasks_busy) == 1 and len(self.tasks_idle) == 0:
             # solo hay 1 tarea activa y no queda ninguna pendiente
-            assert len(self.workers_busy) is 1
+            assert len(self.workers_busy) == 1
             # tomamos el significado de la unica clave de este dict
-            last_busy_tid = self.workers_busy.values()[0]
+            last_busy_tid = (self.workers_busy.values())[0]
             # que ademas deberia ser el unico elem de este otro set
-            assert len(self.tasks_busy) is 1 and last_busy_tid in self.tasks_busy
+            assert len(self.tasks_busy) == 1 and last_busy_tid in self.tasks_busy
             # ahora veamos si es la tarea inicial o no...
             if last_busy_tid == self.main_task_tid:
                 # solo queda la tarea raiz
@@ -173,7 +187,7 @@ class AlsPartitionerMaster(Master):
             #else:
             #ACA SOLO ENTRA SI EL SECUENCIAL TERMINO MAL Y AHORA SOLO QUEDA 1 TAREA DEL PARALELO PARA TERMINAR
             #print "Queda 1 sola tarea pero no es la secuencial, asique esto no puede estar ocurriendo"
-        elif len(self.tasks_idle) is 0 and len(self.workers_busy) is 0 and len(self.partition_tasks) is 0:
+        elif len(self.tasks_idle) == 0 and len(self.workers_busy) == 0 and len(self.partition_tasks) == 0:
             #No pregunto por self.partitioning porque creo que es por esa variable que tuve que hacer esta validacion
             self.par_finished = True
             self.finished = True
@@ -183,6 +197,8 @@ class AlsPartitionerMaster(Master):
                 os.remove(os.path.join(settings.trola_output_dir, "als", tid))
 
     def enqueue_partition(self, partition, infinite_timeout=False, curMax=0, level=0):
+        print("Debug-mfrias4, master.py line 200. Entered enqueue_partition with infinite_timeout = ", infinite_timeout)
+        print("Debug-mfrias4, master.py line 201. Entered enqueue_partition with partition = ", partition)
         tid = os.path.basename(partition)
         ext = os.path.splitext(tid)[1]
         #ttype = ext.lstrip('.')
@@ -200,7 +216,7 @@ class AlsPartitionerMaster(Master):
 
         Returns (worker_id, (tid, ttype, tdata)) tuple.
         """
-
+        print("Debug-mfrias4, master.py line 205. Entered assign_mission")
         tid, ttype, tdata, infinite_timeout, curMax, level = self.tasks_idle.pop(0)
         self.tasks_busy.add(tid)
         worker = self.workers_idle.pop(0)
@@ -271,6 +287,7 @@ class AlsPartitionerMaster(Master):
         if event.scope == 0:
             raise IOError("Scope can not be zero")
         """
+        print("Debug-mfrias4, master.py line 285, entered partitionate")
         amm = self.upper_lower()
         old_amm = amm
 
@@ -297,33 +314,41 @@ class AlsPartitionerMaster(Master):
         max_sum = 0
         rang = range(0, amm)
         
+        print("Debug-mfrias4, master.py line 314. amm = ", amm)
         for i in rang:
             partition_event = self.partition_tasks.pop(0)
             max_sum += partition_event.max
             aux.append(partition_event)
+            print("Debug-mfrias4, master.py line 318. tasks queue size = ", aux.qsize())
         
         #upToSum = 0 #DEBUG
         res = 0
-        
+
+        print("Debug-mfrias4, master.py line 327. max_sum = ", max_sum, "rang = ", rang)
+    
         for i in rang:
             event = aux.pop(0)
             upTo = ((self.upper * max_sum) / (amm * amm * event.max)) if max_sum > 0 else self.upper / amm
+            print("Debug-mfrias4, master.py line 327. max_sum = ", max_sum, " upTo = ", upTo)
             #upToSum += upTo
             #if upTo == 0: #DEBUG
             #    print "upTo dio 0!!! con self.upper = %d, max_sum = %d, amm = %d, event.max = %d" % (upTo, self.upper, max_sum, amm, event.max) #DEBUG
-            (event.partitions, event.max, event.level) = partition(event.file_path, event.output_directory, event.scope, event.rels, self.enqueue_partition, settings.aliasing, upto=upTo, level=event.level)      
+            (event.partitions, event.max, event.level) = partition(event.file_path, event.output_directory, event.scope, event.rels, self.enqueue_partition, settings.aliasing, upto=upTo, level=event.level)
+            print("Debug-mfrias4, master.py line 337. After partition")
+            print("Debug-mfrias4, master.py line 338. (event.partitions, event.max, event.level) = ", (event.partitions, event.max, event.level))
         
             if event.partitions == 1 or event.partitions == 0:
-                if settings.debug:
-                    print ('file %s will be enqueued to be resolved with infinite timeout' % os.path.basename(event.file_path))
+                print ("Debug-mfrias4, master.py line 341. File will be enqueued to be resolved with infinite timeout: ", os.path.basename(event.file_path))
                 tid = os.path.basename(event.file_path)
                 ext = os.path.splitext(tid)[1]
                 #ttype = ext.lstrip('.')
                 ttype = "cnf"
                 tbody = read_file(event.file_path)
+                print("Debug-mfrias4, master.py line 340. Event file path = ", event.file_path)
                 self.tasks_done.remove(tid)
                 self.tasks_idle.append((tid, ttype, tbody, True, event.max, event.level))
                 event.finish()
+                print("Debug-mfrias4, master.py line 344. Partitionate finished")
             #elif event.partitions == -1:
             #    self.partition_tasks.append(event)
             #    event.finish()

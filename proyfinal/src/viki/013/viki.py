@@ -1,12 +1,10 @@
-#!/usr/bin/env python
-
 import andrea.settings
 import andrea.network
 import sys, os, getopt, time
 
 from andrea.andrea   import *
 from andrea.utils    import ensure_directory
-from andrea.utils    import secs2human_older
+from andrea.utils    import secs2human
 from andrea.worker   import Worker
 from andrea.network  import Role
 from time            import sleep
@@ -21,25 +19,41 @@ def main():
     andrea.network.map = andrea.network.ProcessMap()
 
     config_path = parse_cmd_line()
+
+    print("Debug-mfrias4: viki.py line 23: config_path = ", config_path)
+
     config_path = os.path.abspath(config_path)
+
+    print("Debug-mfrias4: viki.py line 27: config_path second occurrence = ", config_path)
+
     andrea.settings.read(config_path)
     settings.trola_output_dir = os.path.join(andrea.settings.local_store(), andrea.settings.experiment['full_id'], "trola")
+
+    print("Debug-mfrias4: viki.py line 32: trola_output_dir = ", settings.trola_output_dir)
 
     andrea.network.sync_zero_time()
     sleep(andrea.network.map.my_rank * 0.05)
 
-    create_output_file(config_path, show_welcome_banner, config_path, VIKI_LOGO)
+    print("Debug-mfrias4: viki.py line 37: andrea.network.map = ", andrea.network.map)
+
+    create_output_file(andrea.network.map, config_path, show_welcome_banner, config_path, VIKI_LOGO)
+
+    print("Debug-mfrias4: viki.py line 37: created output file in ", config_path)
 
     role2class = dict({Role.M: AlsPartitionerMaster, Role.W: InfiniteTimeoutWorker})
 
     my_class = role2class[andrea.network.map.my_role]
+
+    print("Debug-mfrias4: viki.py line 47 my_class = ", my_class)
+
     me = my_class()
+
     me.start()
     me.cleanup()
 
     if andrea.network.map.am_master():
         print ('\n', 'viki', VIKI_VERSION, \
-          'closing after', secs2human_older(andrea.network.time()))
+          'closing after', secs2human(andrea.network.time()))
 
 def parse_cmd_line():
 
@@ -56,9 +70,10 @@ def parse_cmd_line():
              (('-p', '--process-map'), show_process_map))
 
     for switch, function in modes:
-        print('esto es swithc ', switch , ' || ')
+        print('esto es switch ', switch , ' || ')
         # print('esto es argv ', argv, ' ||')
         if sys.argv[1].startswith(switch):
+            print("Debug-mfrias4. viki line 60")
             if andrea.network.map.am_master():
                 if function():
                     sys.exit(0)
