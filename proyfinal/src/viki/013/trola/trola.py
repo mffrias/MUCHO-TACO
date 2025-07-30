@@ -150,22 +150,22 @@ def save_als(nrels, choices, name):
                 newtups[x] = [choice[j]]
             expr = []
             #print newtups
-            print("Debug-mfrias4 trola.py line 153, newtups.items() = ", newtups.items())
+            #print("Debug-mfrias4 trola.py line 153, newtups.items() = ", newtups.items())
             for x, ys in newtups.items():
                 expr.append('\n+'.join(map(lambda y: render.edge(x, y), ys)))
             als = als.replace(conf.magicstr + render.nrel(j),
               'QF.%s_0 in' % render.nrel(j) + '\n' + '\n+'.join(expr) + '\n')
-            print("Debug-mfrias4 trola.py line 158, als = ", als)
+            #print("Debug-mfrias4 trola.py line 158, als = ", als)
     else:
         als = to_alloy(nrels, choices, name)
-    print("Debug-mfrias4 trola.py line 161, file where als will be solved = ", os.path.join(conf.subdir('als'), name + '.als'))
+    #print("Debug-mfrias4 trola.py line 161, file where als will be solved = ", os.path.join(conf.subdir('als'), name + '.als'))
     f = open(os.path.join(conf.subdir('als'), name + '.als'), 'w')
     f.write(als)
     
     #print os.path.join(conf.subdir('als'), name+'.als')
-    print("Debug-mfrias4 trola.py line 164, conf.callback_function = ", conf.callback_function)
+    #print("Debug-mfrias4 trola.py line 164, conf.callback_function = ", conf.callback_function)
     if conf.callback_function:
-        print("Debug-mfrias4 trola.py line 166, callback_file_name = ", os.path.join(conf.subdir('als'), name+'.als'))
+        #print("Debug-mfrias4 trola.py line 166, callback_file_name = ", os.path.join(conf.subdir('als'), name+'.als'))
         conf.callback_file_name = os.path.join(conf.subdir('als'), name+'.als')
 
 def save_dot(nrels, choices, name):
@@ -260,39 +260,39 @@ def bacatracio(scope, limit, nrels, x=0, y=1, trail=[], reach=[]):
     """
     Recorrer DFS el espacio de heaps validos y mostrar cada uno.
     """
-    print("Debug-mfrias4, trola.py line 260. Entering bacatracio")
-    print("Debug-mfrias4, trola.py line 261. conf.counts_upto = ", conf.counts_upto)
-    print("Debug-mfrias4, trola.py line 262. conf.stats.nproduced = ", conf.stats.nproduced)
-    print("Debug-mfrias4, trola.py line 263. conf.counts_upto = ", conf.counts_upto)
-    print("Debug-mfrias4, trola.py line 264. conf.stats.nproduced >= conf.counts_upto = ", conf.stats.nproduced >= conf.counts_upto)
+    #print("Debug-mfrias4, trola.py line 260. Entering bacatracio")
+    #print("Debug-mfrias4, trola.py line 261. conf.counts_upto = ", conf.counts_upto)
+    #print("Debug-mfrias4, trola.py line 262. conf.stats.nproduced = ", conf.stats.nproduced)
+    #print("Debug-mfrias4, trola.py line 263. conf.counts_upto = ", conf.counts_upto)
+    #print("Debug-mfrias4, trola.py line 264. conf.stats.nproduced >= conf.counts_upto = ", conf.stats.nproduced >= conf.counts_upto)
     if conf.counts_upto and conf.stats.nproduced >= conf.counts_upto:
-        print("Debug-mfrias4, trola.py line 266. in bacatracio. scope = ", scope, " limit = ", limit, " nrels = ", nrels, " x = ", x, " y = ", y)
+        #print("Debug-mfrias4, trola.py line 266. in bacatracio. scope = ", scope, " limit = ", limit, " nrels = ", nrels, " x = ", x, " y = ", y)
         return
     for choice in choices(scope, limit, nrels, x, y):
-        print("Debug-mfrias4, trola.py line 269. in bacatracio. choice = ", choice, " trail = ", trail)
+        #print("Debug-mfrias4, trola.py line 269. in bacatracio. choice = ", choice, " trail = ", trail)
         trail.append(choice)
         reachable = reach[:] + [rc for rc in choice if rc != None]
-        print("Debug-mfrias4, trola.py line 272. in bacatracio. Reachable = ", reachable)
+        #print("Debug-mfrias4, trola.py line 272. in bacatracio. Reachable = ", reachable)
 
         if conf.debug.dfs:
             print( '\ndebug.dfs', 50 * '=', choice)
             print( '  choices:', trail)
             print( '  reachable:', reachable)
         if x+1 < limit and x+1 in reachable: # suboptimo pero zafa por ahora
-            print("Debug-mfrias4 trola.py line 274 locating bug")
+            #print("Debug-mfrias4 trola.py line 274 locating bug")
             m = max_nonull(choice)
             newy = (m + 1 if m else y)
-            print("Debug-mfrias4, trola.py line 283. Recursive call bacatracio")
+            #print("Debug-mfrias4, trola.py line 283. Recursive call bacatracio")
             bacatracio(scope, limit, nrels, x+1, newy, trail, reachable)
         else:
             if not conf.subset or conf.stats.nproduced in conf.subset:
                 show(nrels, trail)
             conf.stats.nproduced += 1
-            print("Debug-mfrias4 trola.py line 288. conf.stats.nproduced = ", conf.stats.nproduced)
-            print("Debug-mfrias4 trola.py line 289. conf.callback_function = ", conf.callback_function, " and conf.saveals = ", conf.saveals)
+            #print("Debug-mfrias4 trola.py line 288. conf.stats.nproduced = ", conf.stats.nproduced)
+            #print("Debug-mfrias4 trola.py line 289. conf.callback_function = ", conf.callback_function, " and conf.saveals = ", conf.saveals)
             if conf.callback_function and conf.saveals:
             #if conf.callback_function:
-                print("Debug-mfrias4, trola.py line 293. conf.callback_file_name = ", conf.callback_file_name)
+                #print("Debug-mfrias4, trola.py line 293. conf.callback_file_name = ", conf.callback_file_name)
                 conf.callback_function(conf.callback_file_name, infinite_timeout=False, curMax=limit, level=conf.level)
             #print 'file: %s' % conf.callback_file_name
         trail.pop()
@@ -306,41 +306,41 @@ def choices(scope, limit, nrels, x, yr):
     Genera las alternativas legales para x bajo yr
     (el menor y nunca aun alcanzado).
     """
-    print("Debug-mfrias4 trola.py line 301, entered choices. scope = ", scope, " limit = ", limit, " nrels = ", nrels)
+    #print("Debug-mfrias4 trola.py line 301, entered choices. scope = ", scope, " limit = ", limit, " nrels = ", nrels)
     if conf.debug.choices:
         print( '\n***** debug.choices *****',)
         print( 'for N%u --r*--> N?|null ***** under yr == %u *****' % (x, yr))
 
     # idem anterior pero ademas filtrado por las cotas parseadas
     # for relation j returns the possibilities in relation j for input x, sorted in increasing order
-    print("Debug-mfrias4 trola.py line 308, entered choices. Locating bug conf.relpairs = ", conf.relpairs)    
+    #print("Debug-mfrias4 trola.py line 308, entered choices. Locating bug conf.relpairs = ", conf.relpairs)    
     possible = lambda j : sorted(conf.relpairs[j][x], key=lambda x: -1 * float('inf') if x is None else x)
-    print("Debug-mfrias4 trola.py line 310, entered choices. Locating bug. possible = ", possible)
+    #print("Debug-mfrias4 trola.py line 310, entered choices. Locating bug. possible = ", possible)
 
     if conf.debug.choices:
         for rj in range(nrels):
             print ('\tpossible\t  %-10s %s' % (render.nrel(rj),
                 ', '.join(map(str, possible(rj)))))
     
-    print("Debug-mfrias4 trola.py line 319, entered choices. Locating bug")
-    print("Debug-mfrias4 trola.py line 320, entered choices. Test possible = ", possible(0))
+    #print("Debug-mfrias4 trola.py line 319, entered choices. Locating bug")
+    #print("Debug-mfrias4 trola.py line 320, entered choices. Test possible = ", possible(0))
     for choice in product(*[possible(rj) for rj in range(nrels)]):
-        print("Debug-mfrias4, trola.py line 320, entered choices locating bug")
+        #print("Debug-mfrias4, trola.py line 320, entered choices locating bug")
         if conf.debug.choices:
-            print("Debug-mfrias4, trola.py line 322, entered choices locating bug")
+            #print("Debug-mfrias4, trola.py line 322, entered choices locating bug")
             print( '\n\t', '%20s'%map(str, choice),)
         ymax = yr
         ok = True
-        print("Debug-mfrias4, trola.py line 326, entered choices locating bug")
+        #print("Debug-mfrias4, trola.py line 326, entered choices locating bug")
         for i, rc in enumerate(choice):
             if conf.aliasing:
-                print("Debug-mfrias4, trola.py line 331, entered choices locating bug")
+                #print("Debug-mfrias4, trola.py line 331, entered choices locating bug")
                 ok = rc is None or x < rc <= ymax
-                print("Debug-mfrias4, trola.py line 333, entered choices. ok = ", ok)
+                #print("Debug-mfrias4, trola.py line 333, entered choices. ok = ", ok)
             else:
-                print("Debug-mfrias4, trola.py line 335, entered choices locating bug")
+                #print("Debug-mfrias4, trola.py line 335, entered choices locating bug")
                 ok = rc is None or rc == ymax
-                print("Debug-mfrias4, trola.py line 337, entered choices. ok = ", ok)
+                #print("Debug-mfrias4, trola.py line 337, entered choices. ok = ", ok)
             if not ok:
                 break                
             if rc == ymax:
@@ -352,7 +352,7 @@ def choices(scope, limit, nrels, x, yr):
         else:
             if conf.debug.choices:
                 print( '\t\t', 'KO (%u, x=%u, ymax=%u)' % (rc, x, ymax))
-    print("Debug-mfrias4 trola.py line 347, exiting choices.")
+    #print("Debug-mfrias4 trola.py line 347, exiting choices.")
 
 
 def max_nonull(choice):
@@ -360,9 +360,9 @@ def max_nonull(choice):
     max(iterable) que devuelve 0 si todos son None.
     
     """
-    print("Debug-mfrias4 trola.py line 357, choice = ", choice)
+    #print("Debug-mfrias4 trola.py line 357, choice = ", choice)
     non_None_choices = [i for i in choice if i is not None]
-    print("Debug-mfrias4 trola.py line 359, non_None_choices = ", non_None_choices)
+    #print("Debug-mfrias4 trola.py line 359, non_None_choices = ", non_None_choices)
     return max(non_None_choices) if len(non_None_choices)>0 else 0
 
 
@@ -414,8 +414,8 @@ def show_usage():
     print( 'usage: trola.py OPTIONS template.als')
 
 def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=None, level=0):
-    print("Debug-mfrias4, trola.py line 415. Entering partition")
-    print("Debug-mfrias4, trola.py line 416. callback = ", callback)
+    #print("Debug-mfrias4, trola.py line 415. Entering partition")
+    #print("Debug-mfrias4, trola.py line 416. callback = ", callback)
     conf.stats.nproduced = 0
     conf.quiet = True
     conf.saveals = True
@@ -425,8 +425,8 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
     conf.scope = int(scope)
     conf.aliasing = aliasing
     conf.level = level
-    print("Debug-mfrias4, trola.py line 425. conf.outdir = ", conf.outdir, " upto = ", upto)
-    print("Debug-mfrias4, trola.py line 426. conf.relnames = ", conf.relnames, " conf.nrels = ", conf.nrels, " conf.scope = ", conf.scope, " conf.aliasing = ", conf.aliasing, " conf.level = ", conf.level, " max = ", max)
+    #print("Debug-mfrias4, trola.py line 425. conf.outdir = ", conf.outdir, " upto = ", upto)
+    #print("Debug-mfrias4, trola.py line 426. conf.relnames = ", conf.relnames, " conf.nrels = ", conf.nrels, " conf.scope = ", conf.scope, " conf.aliasing = ", conf.aliasing, " conf.level = ", conf.level, " max = ", max)
 
     if upto != None and max == None:
         conf.counts = True
@@ -446,7 +446,7 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
         raise IOError('Could not open file ' + specpath + '\n')
 
     conf.basespecpath = specpath
-    print("Debug-mfrias4, trola.py line 442 specpath = ", specpath)
+    #print("Debug-mfrias4, trola.py line 442 specpath = ", specpath)
     conf.basespec = open(specpath, 'r').read()
 
     if not conf.outdir:
@@ -455,7 +455,7 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
         specname, specext = os.path.splitext(specname)
         conf.outdir = os.path.join(specdirpar, specname, 'm%u' % conf.max)
     if not os.path.exists(conf.outdir):
-        print("Debug-mfrias4, trola.py line 456 conf.saveals = ", conf.saveals, " conf.outdir = ", conf.outdir)
+        #print("Debug-mfrias4, trola.py line 456 conf.saveals = ", conf.saveals, " conf.outdir = ", conf.outdir)
         if conf.saveals:
             os.makedirs(conf.outdir)
     elif not os.path.isdir(conf.outdir):
@@ -464,13 +464,13 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
     if conf.saveals and not os.path.exists(conf.subdir('als')):
         os.mkdir(conf.subdir('als'))
 
-    print("Debug-mfrias4 trola.py line 465 before time.time()")
+    #print("Debug-mfrias4 trola.py line 465 before time.time()")
     starttime = time.time()
-    print("Debug-mfrias4 trola.py line 467 before time.clock()")
+    #print("Debug-mfrias4 trola.py line 467 before time.clock()")
     startclock = time.process_time()
 
     if conf.basespec:
-        print("Debug-mfrias4 trola.py line 465. conf.basespec = ", conf.basespec)
+        #print("Debug-mfrias4 trola.py line 465. conf.basespec = ", conf.basespec)
         conf.relpairs = dict()
         for j in range(nrels):
             relname = render.nrel(j)
@@ -480,24 +480,24 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
                 if x not in conf.relpairs[j]:
                     conf.relpairs[j][x] = list()
                 conf.relpairs[j][x].append(y)
-                print("Debug-mfrias4, trola.py line 481, j = ", j, " conf.relpairs[j][x] = ", conf.relpairs[j][x])   
+                #print("Debug-mfrias4, trola.py line 481, j = ", j, " conf.relpairs[j][x] = ", conf.relpairs[j][x])   
             conf.basespec = conf.basespec[:pos] + '\n' \
                 + conf.magicstr + relname + '\n' + conf.basespec[end-1:] # improve!
             if conf.debug.relpairs:
                 print(conf.relpairs[j])
-            print("Debug-mfrias4, trola.py line 486, j = ", j, " conf.relpairs[j] = ", conf.relpairs[j])   
+            #print("Debug-mfrias4, trola.py line 486, j = ", j, " conf.relpairs[j] = ", conf.relpairs[j])   
 
     if conf.counts:
-        print("Debug-mfrias4, trola.py line 471, conf.counts is true")
+        #print("Debug-mfrias4, trola.py line 471, conf.counts is true")
         conf.saveals=False
         conf.max = 0
         conf.stats.nproduced = 0
         while conf.stats.nproduced < conf.counts_upto and conf.max < conf.scope: # ojo, esto esta ok? depende de si conf.max incluye o no el pasado
             conf.stats.nproduced = 0
             conf.max += 1
-            print("Debug-mfrias4, trola.py line 489, Before call to bacatracio. conf.stats.nproduced = ", conf.stats.nproduced, " conf.counts_upto = ", conf.counts_upto)
+            #print("Debug-mfrias4, trola.py line 489, Before call to bacatracio. conf.stats.nproduced = ", conf.stats.nproduced, " conf.counts_upto = ", conf.counts_upto)
             bacatracio(conf.scope, conf.max, nrels)
-            print("Debug-mfrias4, trola.py line 492, After call to bacatracio. conf.stats.nproduced = ", conf.stats.nproduced, " conf.counts_upto = ", conf.counts_upto)
+            #print("Debug-mfrias4, trola.py line 492, After call to bacatracio. conf.stats.nproduced = ", conf.stats.nproduced, " conf.counts_upto = ", conf.counts_upto)
             #print'  tried max %u, would produce %u subps.' % (conf.max, conf.stats.nproduced) # DEBUG
             #if conf.stats.nproduced < conf.counts_upto and conf.max < conf.scope:
                 #print conf.max, conf.stats.nproduced
@@ -506,36 +506,36 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
         # conf.counts_upto was set to None
         #conf.counts, conf.counts_upto = False, -sys.maxsize - 1
         conf.counts = False
-        print("Debug-mfrias4, trola.py line 507, conf.counts = ", conf.counts, " conf.counts_upto = ", conf.counts_upto, "-sys.maxsize - 1", -sys.maxsize - 1)
+        #print("Debug-mfrias4, trola.py line 507, conf.counts = ", conf.counts, " conf.counts_upto = ", conf.counts_upto, "-sys.maxsize - 1", -sys.maxsize - 1)
         
         if conf.stats.nproduced > 1:
-            print("Debug-mfrias4, trola.py line 500, conf.stats.nproduced = ", conf.stats.nproduced)
+            #print("Debug-mfrias4, trola.py line 500, conf.stats.nproduced = ", conf.stats.nproduced)
             conf.level += 1
-            print("Debug-mfrias4, trola.py line 502, conf.stats.nproduced < conf.counts_upto = ", conf.stats.nproduced < conf.counts_upto)
+            #print("Debug-mfrias4, trola.py line 502, conf.stats.nproduced < conf.counts_upto = ", conf.stats.nproduced < conf.counts_upto)
             if conf.stats.nproduced < conf.counts_upto:
-                print("Debug-mfrias4, trola.py line 501, conf.stats.nproduced < conf.counts_upto")
+                #print("Debug-mfrias4, trola.py line 501, conf.stats.nproduced < conf.counts_upto")
                 # usamos el mayor conf.max posible (fijar todo lo restante)
                 assert conf.max == conf.scope
                 conf.stats.nproduced = 0
                 conf.saveals = True
-                print("Debug-mfrias4, trola.py line 506, about to call bacatracio with conf.saveals = true")
+                #print("Debug-mfrias4, trola.py line 506, about to call bacatracio with conf.saveals = true")
                 bacatracio(conf.scope, conf.max, nrels)
             else:
                 # me pase del upto deseado; veamos si con el valor anterior de conf.max da >1 hijos
-                print("Debug-mfrias4, trola.py line 510, conf.stats.nproduced >= conf.counts_upto = ", conf.stats.nproduced >= conf.counts_upto)
+                #print("Debug-mfrias4, trola.py line 510, conf.stats.nproduced >= conf.counts_upto = ", conf.stats.nproduced >= conf.counts_upto)
                 conf.stats.nproduced = 0
                 bacatracio(conf.scope, conf.max - 1, nrels)
                 assert conf.stats.nproduced > 0
                 #print '  retried %u, produced %u subps.' % (conf.max-1, conf.stats.nproduced) # DEBUG
                 if conf.stats.nproduced == 1:
-                    print("Debug-mfrias4, trola.py line 529, conf.stats.nproduced = ", conf.stats.nproduced)
+                    #print("Debug-mfrias4, trola.py line 529, conf.stats.nproduced = ", conf.stats.nproduced)
                     conf.stats.nproduced = 0
                     #conf.stats.nproduced = -1
                     conf.saveals = True
                     bacatracio(conf.scope, conf.max, nrels)
                 else:
                     # caso normal: usamos el anterior y producimos >1 hijos
-                    print("Debug-mfrias4, trola.py line 535, normal case")
+                    #print("Debug-mfrias4, trola.py line 535, normal case")
                     conf.stats.nproduced = 0
                     conf.saveals = True
                     conf.max -= 1
@@ -543,10 +543,10 @@ def partition(infile, outdir, scope, rels, callback, aliasing, upto=None, max=No
             #conf.stats.nproduced = 0
             #bacatracio(conf.scope, conf.max - 1, nrels)
     else:
-        print("Debug-mfrias4, trola.py line 514 before bacatracio")
+        #print("Debug-mfrias4, trola.py line 514 before bacatracio")
         bacatracio(scope, limit, nrels)
     
-    print("Debug-mfrias4, trola.py line 522. conf.stats.nproduced = ", conf.stats.nproduced, " conf.max = ", conf.max, " conf.level = ", conf.level)
+    #print("Debug-mfrias4, trola.py line 522. conf.stats.nproduced = ", conf.stats.nproduced, " conf.max = ", conf.max, " conf.level = ", conf.level)
     return (conf.stats.nproduced, conf.max, conf.level)
     
 def main():

@@ -16,7 +16,7 @@ from time    import sleep
 class Master(Process):
 
     def start(self):
-        print("Debug-mfrias4, andrea.master.py line 19. Just entered start")
+        #print("Debug-mfrias4, andrea.master.py line 19. Just entered start")
         self.tasks_idle = []
         self.tasks_busy = set()
         self.tasks_done = set()
@@ -28,17 +28,18 @@ class Master(Process):
         self.tasklog_file = open(andrea.settings.outdir_path('andrea.tlog.csv'), 'w')
         self.tasklog_file.write('#task_id,task_type,worker_rank,timeout,overhead,inv,max,level,outcome,rc_num,rc_str,tot_msec_solv,tot_msec_task\n')
         self.tasklog = csv.writer(self.tasklog_file)
-        print("Debug-mfrias4, andrea.master.py line 31. tasklog = ", self.tasklog_file)
+        #print("Debug-mfrias4, andrea.master.py line 31. tasklog = ", self.tasklog_file)
 
         self.weather_reports = andrea.settings.logging['weather_reports']
+        print("Debug-mfrias4 andrea.master.py line 34. self.weather_reports = ", self.weather_reports)
 
         if self.weather_reports: # Force wrep before populating task queue
             self.weather_every = float(andrea.settings.logging['weather_every'])
             self.bb.add(WeatherEvent('preinit', self.get_stats()))
             self.last_weather = andrea.network.time()
-        print("Debug-mfrias4, andrea.master.py line 39. Before populating task queue")
+        #print("Debug-mfrias4, andrea.master.py line 39. Before populating task queue")
         self.populate_task_queue() # Load all task files into main memory (!)
-        print("Debug-mfrias4, andrea.master.py line 41. After populating task queue")
+        #print("Debug-mfrias4, andrea.master.py line 41. After populating task queue")
         if self.weather_reports: # Force wrep when ready to start working
             self.bb.add(WeatherEvent('initial', self.get_stats()))
             self.last_weather = andrea.network.time()
@@ -55,7 +56,7 @@ class Master(Process):
 
     def main_loop(self):
 
-        print("Debug-mfrias4: andrea.master.py line 57. Entered main_loop. I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 57. Entered main_loop. I am worker ", self.my_rank)
 
         while not self.finished:
 
@@ -65,8 +66,8 @@ class Master(Process):
                 print("message waiting OUT")
                 
 
-            print("Debug-mfrias4: andrea.master.py line 67. self.workers_idle = ", self.workers_idle)
-            print("Debug-mfrias4: andrea.master.py line 68. self.tasks_idle = ", self.tasks_idle)
+            #print("Debug-mfrias4: andrea.master.py line 67. self.workers_idle = ", self.workers_idle)
+            #print("Debug-mfrias4: andrea.master.py line 68. self.tasks_idle = ", self.tasks_idle)
             if self.workers_idle and self.tasks_idle:
                 print("Sent ")
                 worker, task = self.assign_mission()
@@ -76,10 +77,13 @@ class Master(Process):
             if not (self.tasks_idle or self.workers_busy):
                 self.finished = True
                 print("DONE WITH ALL TASKS")
-
+            
+            #print("Debug-mfrias4 andrea.master.py line 80. self.weather_reports = ", self.weather_reports)
             if self.weather_reports:
+                #print("Debug-mfrias4, andrea.master.py line 81, weather repor  and curr_time = ", andrea.network.time(), " and prev_time = ", self.last_weather)
                 current_time = andrea.network.time()
                 if current_time - self.last_weather > self.weather_every:
+                    #print("Debug-mfrias4 andrea.master.py, line 84. A new weather report is about to be addded")
                     self.last_weather = current_time
                     self.bb.add(WeatherEvent('update', self.get_stats()))
         
@@ -87,16 +91,16 @@ class Master(Process):
 
 
     def handle_message(self, msg):
-        print("Debug-mfrias4: andrea.master.py line 90. msg = ", msg, " I am worker ", self.my_rank)
-        print("Debug-mfrias4: andrea.master.py line 91. msg.src = ", msg.src)
-        print("Debug-mfrias4: andrea.master.py line 92. msg class = ", msg.__class__.__name__)
-        print("Debug-mfrias4: andrea.master.py line 93. isinstance(msg, WantMission) = ", isinstance(msg, WantMission))
-        print("Debug-mfrias4: andrea.master.py line 94. msg.__class__.__name__ = ", msg.__class__.__name__)
+        #print("Debug-mfrias4: andrea.master.py line 90. msg = ", msg, " I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 91. msg.src = ", msg.src)
+        #print("Debug-mfrias4: andrea.master.py line 92. msg class = ", msg.__class__.__name__)
+        #print("Debug-mfrias4: andrea.master.py line 93. isinstance(msg, WantMission) = ", isinstance(msg, WantMission))
+        #print("Debug-mfrias4: andrea.master.py line 94. msg.__class__.__name__ = ", msg.__class__.__name__)
         if msg.__class__.__name__ == WantMission.__name__:
-            print("Debug-mfrias4, andrea.master.py line 96. msg class is WantMission. Requested by Worker ", msg.src)
+            #print("Debug-mfrias4, andrea.master.py line 96. msg class is WantMission. Requested by Worker ", msg.src)
             self.mission_requested(msg.src)
         elif msg.__class__.__name__ == DoneMission.__name__:
-            print("Debug-mfrias4, andrea.master.py line 99. msg class is DoneMission and msg.body = ", msg.body)
+            #print("Debug-mfrias4, andrea.master.py line 99. msg class is DoneMission and msg.body = ", msg.body)
             tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstatdict = msg.body
             self.mission_finished(msg.src, tid, ttype, curMax, level, infto, timeout, overhead, inv, tres, tecode, testr, tstatdict)
         else:
@@ -104,7 +108,7 @@ class Master(Process):
 
 
     def mission_requested(self, worker):
-        print("Debug-mfrias4: andrea.master.py line 107. mission_requested. I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 107. mission_requested. I am worker ", self.my_rank)
         """
         Event handler: called when idle worker announces WANT_MISSION.
         
@@ -114,13 +118,13 @@ class Master(Process):
         """
         
         if worker in self.workers_busy:
-            print("Debug-mfrias4 andrea.master.py line 116. I am self.my_rank =", self.my_rank, " and got WANT_MISSION from busy worker ", worker)
+            #print("Debug-mfrias4 andrea.master.py line 116. I am self.my_rank =", self.my_rank, " and got WANT_MISSION from busy worker ", worker)
             raise Exception("Got WANT_MISSION from already busy worker!?")
         if worker in self.workers_idle:
             raise Exception("Got WANT_MISSION from already idle worker!?")
 
         self.workers_idle.append(worker)
-        print("Debug-mfrias4, andrea.master.py line 119, worker ", worker, " idle waiting for mission")
+        #print("Debug-mfrias4, andrea.master.py line 119, worker ", worker, " idle waiting for mission")
 
 
     def assign_mission(self):
@@ -131,7 +135,7 @@ class Master(Process):
         Returns (worker_id, (tid, ttype, tdata)) tuple.
         """
         
-        print("Debug-mfrias4: andrea.master.py line 126. mission assigned. I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 126. mission assigned. I am worker ", self.my_rank)
 
         tid, ttype, tdata = self.tasks_idle.pop(0)
         self.tasks_busy.add(tid)
@@ -169,7 +173,7 @@ class Master(Process):
         # Remove worker from workers_busy.
         # Do not add to workers_idle yet! (until WANT_MISSION rcvd)
         
-        print("Debug-mfrias4: andrea.master.py line 169. Mission_finished. I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 169. Mission_finished. I am worker ", self.my_rank)
 
         if worker in self.workers_busy:
             if self.workers_busy[worker] == tid:
@@ -230,12 +234,12 @@ class Master(Process):
 
 
     def populate_task_queue(self):
-        print("Debug-mfrias4: andrea.master.py line 230. populate_task_queue. I am worker ", self.my_rank)
+        #print("Debug-mfrias4: andrea.master.py line 230. populate_task_queue. I am worker ", self.my_rank)
         queue_create_phase = self.bb.add(Event('main', 'queue.create'))
         task_paths = list_all_files(andrea.settings.experiment['tasks'], ('.als', '.cnf'))
         #print task_paths
         for task_path in task_paths:
-            print("Debug-mfrias4: andrea.master.py line 238. populate_task_queue. task_path is ", task_path)
+            #print("Debug-mfrias4: andrea.master.py line 238. populate_task_queue. task_path is ", task_path)
             tid = os.path.basename(task_path)
             ext = os.path.splitext(tid)[1]
             ttype = ext.lstrip('.')

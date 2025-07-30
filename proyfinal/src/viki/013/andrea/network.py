@@ -43,21 +43,21 @@ class ProcessMap:
     """
     def __init__(self):
 
-        print("Debug-mfrias4: network.py line 47")
+        #print("Debug-mfrias4: network.py line 47")
 
         # start by obtaining the essential info about self
         self.my_rank = MPI.COMM_WORLD.Get_rank()
 
-        print("Debug-mfrias: network.py line 52: My rank is", self.my_rank)
+        #print("Debug-mfrias: network.py line 52: My rank is", self.my_rank)
 
         self.my_host = MPI.Get_processor_name()
 
-        print("Debug-mfrias4: network.py line 56 myhost is: ", self.my_host)
+        #print("Debug-mfrias4: network.py line 56 myhost is: ", self.my_host)
 
         self.my_role = None
         self.comm_size = MPI.COMM_WORLD.Get_size()
 
-        print("Debug-mfrias4: network.py line 61 comm_size is: ", self.comm_size)
+        #print("Debug-mfrias4: network.py line 61 comm_size is: ", self.comm_size)
 
         # now exchange that info with all other process
         self.rank_list = range(self.comm_size)
@@ -74,7 +74,7 @@ class ProcessMap:
                     ranks.append(r)
             self.ranks_on_host[host] = ranks
 
-        print("Debug-mfrias4: network.py line 78. ranks_on_host: ", self.ranks_on_host)
+        #print("Debug-mfrias4: network.py line 78. ranks_on_host: ", self.ranks_on_host)
 
         # and assign roles to ranks
         self.role_of_rank = dict()
@@ -85,7 +85,7 @@ class ProcessMap:
         self.role_of_rank[0] = Role.M
         self.my_role = self.role_of_rank[self.my_rank]
 
-        print("Debug-mfrias4: network.py line 89: role_of_rank = ", self.role_of_rank)
+        #print("Debug-mfrias4: network.py line 89: role_of_rank = ", self.role_of_rank)
 
 
     def ranks(self):
@@ -160,17 +160,17 @@ class Message:
 
 class WantMission(Message):
     def __init__(self):
-        print("Debug-mfrias4, network.py line 164. map.my_rank = ", map.my_rank)
+        #print("Debug-mfrias4, network.py line 164. map.my_rank = ", map.my_rank)
         Message.__init__(self, map.my_rank, Rank.MASTER, Tag.WANT_MISSION, '')
 
 class HaveMission(Message):
     def __init__(self, worker, task): # task is a (tid, ttype, tdata) tuple
-        print("Debug-mfrias4, network.py line 168. After init in HaveMission")
+        #print("Debug-mfrias4, network.py line 168. After init in HaveMission")
         Message.__init__(self, Rank.MASTER, worker, Tag.HAVE_MISSION, task)
 
 class DoneMission(Message):
     def __init__(self, results): # results is a (tid, ttype, tres, trc, tstats) tuple
-        print("Debug-mfrias4, network.py line 173. Entered DoneMission")
+        #print("Debug-mfrias4, network.py line 173. Entered DoneMission")
         Message.__init__(self, map.my_rank, Rank.MASTER, Tag.DONE_MISSION, results)
 
 class ExitToShell(Message):
@@ -181,9 +181,9 @@ class ExitToShell(Message):
 def sync():
     """Force an immediate rendezvous of all processes (blocking every caller
     until all have called, then releasing them all concurrently)."""
-    print("Debug-mfrias4, network.py line 184. Before Barrier")
+    #print("Debug-mfrias4, network.py line 184. Before Barrier")
     MPI.COMM_WORLD.Barrier()
-    print("Debug-mfrias4, network.py line 186. After Barrier")
+    #print("Debug-mfrias4, network.py line 186. After Barrier")
 
 def sync_zero_time():
     """Same as above, but with the specific purpose of clock sync. On clusters
@@ -198,7 +198,7 @@ def time():
     return MPI.Wtime() - t_0
 
 def send(msg):
-    print("Debug-mfrias4, network.py line 201. Entered send(msg) with msg = ", msg)
+    #print("Debug-mfrias4, network.py line 201. Entered send(msg) with msg = ", msg)
     """Send a message --any instance of a Message subclass-- to another process."""
     MPI.COMM_WORLD.send(msg, msg.dest, msg.tag)
 
@@ -207,13 +207,13 @@ def send(msg):
     suitable message is waiting to be received, this function will block until
     one arrives (see msg_waiting() for an alternative)."""
 def receive(source_filter=MPI.ANY_SOURCE, tag_filter=MPI.ANY_TAG):
-    print("Debug-mfrias4, network.py line 210. Entered receive(msg)")
+    #print("Debug-mfrias4, network.py line 210. Entered receive(msg)")
     return MPI.COMM_WORLD.recv(None, source_filter, tag_filter)
 
     """Test for availability of a (matching) newly arrived message. This call
     may return True or False, but won't block in either case. If the result is
     True, a subsequent receive() with same filters will not block either."""
 def msg_waiting(source_filter=MPI.ANY_SOURCE, tag_filter=MPI.ANY_TAG):
-    print("Debug-mfrias4, network.py line 217. Entered msg_waiting")
+    #print("Debug-mfrias4, network.py line 217. Entered msg_waiting")
     return MPI.COMM_WORLD.Iprobe(source_filter, tag_filter)
 

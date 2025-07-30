@@ -1,0 +1,1213 @@
+
+/* 
+ * DynAlloy translator options 
+ * --------------------------- 
+ * assertionId= check_roops_core_objects_BinomialHeap_generateInvariant
+ * loopUnroll= 4
+ * removeQuantifiers= true
+ * strictUnrolling= false
+ * build_dynalloy_trace= false
+ */ 
+
+//-------------- prelude--------------//
+module moduleId
+open util/integer
+open util/sequniv as sequniv
+one sig null {}
+fun fun_reach[h: univ, 
+              type: set univ, 
+              field: univ -> univ
+]: set univ { 
+  h.*(field & type->(type+null)) & type 
+}
+
+fun fun_weak_reach[h: univ, 
+              type: set univ, 
+              field: univ -> univ
+]: set univ { 
+  h.*(field) & type 
+}
+abstract sig boolean {}
+one sig true extends boolean {}
+one sig false extends boolean {}
+abstract sig char {}
+pred TruePred[] {}
+pred FalsePred[] { not TruePred[] }
+pred equ[l,r:univ] {l=r}
+pred neq[l,r:univ] {l!=r}
+fun shl[l,r: Int]: Int { l << r } 
+fun sshr[l,r: Int]: Int { l >> r } 
+fun ushr[l,r: Int]: Int { l >>> r } 
+
+fun fun_univ_equals[
+  l:univ, 
+  r: univ 
+]: boolean { 
+  (equ[l,r]) => true else false 
+} 
+
+fun fun_set_add[
+  l: set univ,
+  e: univ
+]: set univ { 
+  l+e 
+} 
+
+fun fun_set_remove[
+  l: set univ,
+  e: univ
+]: set univ {
+  l-e
+}
+fun fun_set_contains[
+  l: set univ,
+  e: univ
+]: boolean {
+  (e in l) => true else false 
+}
+pred isSubset[
+  l: set univ,
+  r: set univ
+] {
+  (l in r) 
+}
+pred isNotSubset[
+  l: set univ,
+  r: set univ
+] {
+  (l !in r) 
+}
+fun fun_set_size[s: set univ]: Int { #s } 
+
+fun fun_not_empty_set[s: set univ]: boolean { (no s) => false else true } 
+
+fun fun_set_is_empty[s: set univ]: boolean { (no s) => true else false }
+pred pred_empty_set[l: set univ] { (no l) }
+pred pred_set_some[l: set univ] { some l }
+pred pred_set_one[l: set univ] { one l }
+pred pred_set_lone[l: set univ] { lone l }
+pred pred_Object_subset[
+  s: set univ
+] {
+  s in java_lang_Object+null
+}
+fun fun_set_intersection[
+  l: set univ,
+  r: set univ
+]: set univ {
+  l & r 
+} 
+fun fun_set_difference[
+  l: set univ,
+  r: set univ
+]: set univ {
+  l - r 
+} 
+fun fun_rel_difference[ 
+  rel: univ -> univ, 
+  l: univ,
+  r: univ
+]: univ->univ {
+ rel - (l->r) 
+}
+fun fun_rel_add[ 
+  rel: univ -> univ, 
+  l: univ,
+  r: univ
+]: univ->univ {
+ rel + (l->r) 
+}
+fun fun_set_sum[
+  s: set Int
+]: Int {
+  sum s 
+}
+pred pred_empty_list[l: Int -> univ] { (no l) }
+fun fun_list_add[
+  l: Int -> univ,
+  e: univ
+]: Int -> univ {
+  l + (Int[#(l.univ)]->e)
+} 
+
+fun fun_list_get[
+  l: Int -> univ, 
+  index: Int
+]: univ { 
+  index.l 
+} 
+
+fun fun_list_contains[
+  l: Int -> univ, 
+  e: univ
+]: boolean { 
+  (e in Int.l) => true else false 
+} 
+
+fun fun_list_remove[
+  l: Int -> univ, 
+  index: Int
+]: Int -> univ { 
+  prevs[index]<:(l-(index->univ)) + next.(nexts[index]<:(l-(index->univ))) 
+} 
+
+fun fun_list_size[s: Int -> univ]: Int { #s } 
+
+fun fun_list_equals[
+  s1:Int -> univ, 
+  s2: Int -> univ
+]: boolean { 
+  (s1=s2) => true else false 
+} 
+
+fun fun_list_empty[s: Int -> univ]: boolean { (#s = 0) => true else false }
+pred pred_empty_map[map: univ -> univ] { (no map) }
+fun fun_map_put[
+  map: univ->univ, 
+  k: univ, 
+  v: univ
+]: univ-> univ { 
+  map ++ (k->v) 
+}
+
+fun fun_map_contains_key[
+  map: univ -> univ, 
+  k: univ
+]: boolean { 
+  (some k.map) => true else false 
+}
+
+fun fun_map_remove[
+  map: univ -> univ, 
+  k: univ
+]: univ->univ {
+  map - (k->univ) 
+} 
+
+fun fun_map_get[
+  map: univ -> univ, 
+  k: univ
+]: univ { 
+  (some k.map) => k.map else null 
+} 
+
+fun fun_map_is_empty[
+  map: univ -> univ, 
+]: boolean { 
+  (some map) => false else true 
+}
+
+fun fun_map_clear[
+  mapEntries1: univ -> univ -> univ, 
+  map: univ
+]: univ -> univ -> univ { 
+  mapEntries1 - (map -> univ -> univ)
+}
+
+fun fun_map_size[
+  map: univ -> univ, 
+]: univ {
+  #map 
+}
+pred isEmptyOrNull[u: univ] { u in null }
+fun fun_closure[
+  rel: univ -> univ 
+]: univ -> univ {
+  ^rel 
+} 
+
+fun fun_reflexive_closure[
+  rel: univ -> univ 
+]: univ -> univ {
+  *rel 
+} 
+
+fun fun_transpose[
+  rel: univ -> univ 
+]: univ -> univ {
+  ~rel 
+}
+pred liftExpression[
+  expr: univ 
+] {
+  expr=true 
+}
+fun rel_override[
+  r:univ->univ,
+  k:univ, 
+  v:univ
+]: univ->univ { 
+  r - (k->univ) + (k->v) 
+} 
+
+fun Not[a: boolean]: boolean {
+    (a=true) => false else true 
+}
+fun Or[a: boolean, b: boolean]: boolean {
+    (a=true or b=true) => true else false
+}
+fun And[a: boolean, b: boolean]: boolean {
+    (a=true and b=true) => true else false
+}
+fun Xor[a: boolean, b: boolean]: boolean {
+    ((a=true and b=false) or (a=false and b=true)) => true else false
+}
+fun AdderCarry[a: boolean, b: boolean, cin: boolean]: boolean {
+    Or[ And[a,b], And[cin, Xor[a,b]]] 
+}
+fun AdderSum[a: boolean, b: boolean, cin: boolean]: boolean {
+    Xor[Xor[a, b], cin]
+}
+pred updateFieldPost[
+  f1:univ->univ,
+  f0:univ->univ,
+  l:univ,
+  r:univ
+]{ 
+  (r=none) => f1=f0-(l->univ) else f1 = f0 ++ (l->r) 
+}
+pred havocVarPost[u:univ]{}
+pred havocVariable2Post[u:univ->univ]{}
+pred havocVariable3Post[u:univ->(seq univ)]{}
+pred havocFieldPost[f0,f1: univ->univ, u:univ]{ 
+  u<:f0 = u<:f1 
+  some u.f1  
+}
+pred havocFieldContentsPost[target: univ, 
+                            field_0: univ -> univ, 
+                            field_1: univ -> univ] { 
+  field_1 - (target->univ) = field_0 - (target->univ) 
+}
+pred havocListSeqPost[target: univ,
+                            field_0: univ -> Int -> univ, 
+                            field_1: univ -> Int -> univ] { 
+  field_1 - (target->Int->univ) = field_0 - (target->Int->univ) 
+}
+pred pred_in[n: univ, t: set univ] { n in t }
+pred instanceOf[n: univ, t: set univ] { n in t }
+pred isCasteableTo[n: univ, t: set univ] { (n in t) or (n = null) }
+pred getUnusedObjectPost[
+  usedObjects1:set java_lang_Object, 
+  usedObjects0:set java_lang_Object,
+  n1: java_lang_Object+null
+]{ 
+  n1 !in usedObjects0 
+  usedObjects1 = usedObjects0 + (n1)
+}
+//-------------- ClassFields--------------//
+one
+sig ClassFields {}
+{}
+
+
+
+
+//-------------- java_lang_RuntimeException--------------//
+abstract sig java_lang_RuntimeException extends java_lang_Exception {}
+{}
+
+
+
+one
+sig java_lang_RuntimeExceptionLit extends java_lang_RuntimeException {}
+{}
+
+//-------------- java_lang_Exception--------------//
+abstract sig java_lang_Exception extends java_lang_Throwable {}
+{}
+
+
+
+one
+sig java_lang_ExceptionLit extends java_lang_Exception {}
+{}
+
+//-------------- java_lang_Throwable--------------//
+abstract sig java_lang_Throwable extends java_lang_Object {}
+{}
+
+
+
+one
+sig java_lang_ThrowableLit extends java_lang_Throwable {}
+{}
+
+//-------------- java_lang_Object--------------//
+abstract sig java_lang_Object {}
+{}
+
+
+
+
+//-------------- java_lang_NullPointerException--------------//
+abstract one sig java_lang_NullPointerException extends java_lang_RuntimeException {}
+{}
+
+
+
+one
+sig java_lang_NullPointerExceptionLit extends java_lang_NullPointerException {}
+{}
+
+//-------------- roops_core_objects_BinomialHeapNode--------------//
+sig roops_core_objects_BinomialHeapNode extends java_lang_Object {}
+{}
+
+
+
+
+//-------------- roops_core_objects_BinomialHeap--------------//
+sig roops_core_objects_BinomialHeap extends java_lang_Object {}
+{}
+pred precondition_roops_core_objects_BinomialHeap_generateInvariant[
+  roops_core_objects_BinomialHeapNode_child:univ->univ,
+  roops_core_objects_BinomialHeapNode_degree:univ->univ,
+  roops_core_objects_BinomialHeapNode_key:univ->univ,
+  roops_core_objects_BinomialHeapNode_parent:univ->univ,
+  roops_core_objects_BinomialHeapNode_sibling:univ->univ,
+  roops_core_objects_BinomialHeap_Nodes:univ->univ,
+  roops_core_objects_BinomialHeap_size:univ->univ,
+  thiz:univ,
+  throw:univ
+]{
+   equ[throw,
+      null]
+   and 
+   roops_core_objects_BinomialHeap_object_invariant[roops_core_objects_BinomialHeapNode_child,
+                                                   roops_core_objects_BinomialHeapNode_degree,
+                                                   roops_core_objects_BinomialHeapNode_key,
+                                                   roops_core_objects_BinomialHeapNode_parent,
+                                                   roops_core_objects_BinomialHeapNode_sibling,
+                                                   roops_core_objects_BinomialHeap_Nodes,
+                                                   roops_core_objects_BinomialHeap_size,
+                                                   thiz]
+   and 
+   roops_core_objects_BinomialHeap_requires[]
+
+}
+pred roops_core_objects_BinomialHeapCondition0[
+  thiz:univ
+]{
+   isEmptyOrNull[thiz]
+   or 
+   isEmptyOrNull[thiz]
+
+}
+pred roops_core_objects_BinomialHeapCondition1[
+  thiz:univ
+]{
+   not (
+     isEmptyOrNull[thiz]
+     or 
+     isEmptyOrNull[thiz]
+   )
+
+}
+pred roops_core_objects_BinomialHeapCondition2[
+  exit_stmt_reached:univ,
+  throw:univ
+]{
+   (
+     throw=null)
+   and 
+   (
+     exit_stmt_reached=false)
+   and 
+   (
+     true=true)
+
+}
+pred roops_core_objects_BinomialHeapCondition3[
+  exit_stmt_reached:univ,
+  throw:univ
+]{
+   not (
+     (
+       throw=null)
+     and 
+     (
+       exit_stmt_reached=false)
+     and 
+     (
+       true=true)
+   )
+
+}
+pred roops_core_objects_BinomialHeap_object_invariant[
+  roops_core_objects_BinomialHeapNode_child:univ->univ,
+  roops_core_objects_BinomialHeapNode_degree:univ->univ,
+  roops_core_objects_BinomialHeapNode_key:univ->univ,
+  roops_core_objects_BinomialHeapNode_parent:univ->univ,
+  roops_core_objects_BinomialHeapNode_sibling:univ->univ,
+  roops_core_objects_BinomialHeap_Nodes:univ->univ,
+  roops_core_objects_BinomialHeap_size:univ->univ,
+  thiz:univ
+]{
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 (
+                   neq[n.roops_core_objects_BinomialHeapNode_child,
+                      null]
+                   and 
+                   neq[n.roops_core_objects_BinomialHeapNode_sibling,
+                      null]
+                 )
+                 implies 
+                         (
+                           all m:null+roops_core_objects_BinomialHeapNode | {
+                             equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling],m],
+                                true]
+                             implies 
+                                     equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_sibling,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling],m],
+                                        false]
+                           
+                           }
+                         )
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling],n],
+          true]
+       implies 
+               (
+                 (
+                   neq[n.roops_core_objects_BinomialHeapNode_sibling,
+                      null]
+                   implies 
+                           lt[n.roops_core_objects_BinomialHeapNode_degree,
+                             (n.roops_core_objects_BinomialHeapNode_sibling).roops_core_objects_BinomialHeapNode_degree]
+                 )
+                 and 
+                 equ[n.roops_core_objects_BinomialHeapNode_parent,
+                    null]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_parent,
+                    null]
+                 implies 
+                         gte[n.roops_core_objects_BinomialHeapNode_key,
+                            (n.roops_core_objects_BinomialHeapNode_parent).roops_core_objects_BinomialHeapNode_key]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               gte[n.roops_core_objects_BinomialHeapNode_degree,
+                  0]
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_child,
+                    null]
+                 implies 
+                         equ[n.roops_core_objects_BinomialHeapNode_degree,
+                            fun_set_size[fun_reach[n.roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling]]]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_child,
+                    null]
+                 implies 
+                         (
+                           all m:null+roops_core_objects_BinomialHeapNode | {
+                             equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling],m],
+                                true]
+                             implies 
+                                     equ[m.roops_core_objects_BinomialHeapNode_parent,
+                                        n]
+                           
+                           }
+                         )
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_child,
+                    null]
+                 implies 
+                         equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+                            false]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling],n],
+          true]
+       implies 
+               gte[n.roops_core_objects_BinomialHeapNode_key,
+                  0]
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 (
+                   neq[n.roops_core_objects_BinomialHeapNode_sibling,
+                      null]
+                   and 
+                   neq[n.roops_core_objects_BinomialHeapNode_parent,
+                      null]
+                 )
+                 implies 
+                         gt[n.roops_core_objects_BinomialHeapNode_degree,
+                           (n.roops_core_objects_BinomialHeapNode_sibling).roops_core_objects_BinomialHeapNode_degree]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 equ[n.roops_core_objects_BinomialHeapNode_child,
+                    null]
+                 implies 
+                         equ[n.roops_core_objects_BinomialHeapNode_degree,
+                            0]
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 (
+                   neq[n.roops_core_objects_BinomialHeapNode_child,
+                      null]
+                   and 
+                   neq[n.roops_core_objects_BinomialHeapNode_sibling,
+                      null]
+                 )
+                 implies 
+                         (
+                           all m:null+roops_core_objects_BinomialHeapNode | {
+                             liftExpression[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_sibling,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling],m]]
+                             implies 
+                                     equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling],m],
+                                        false]
+                           
+                           }
+                         )
+               )
+     
+     }
+   )
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_sibling,
+                    null]
+                 implies 
+                         equ[fun_set_contains[fun_reach[n.roops_core_objects_BinomialHeapNode_sibling,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+                            false]
+               )
+     
+     }
+   )
+   and 
+   equ[thiz.roops_core_objects_BinomialHeap_size,
+      fun_set_size[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child]]]
+   and 
+   (
+     all n:null+roops_core_objects_BinomialHeapNode | {
+       equ[fun_set_contains[fun_reach[thiz.roops_core_objects_BinomialHeap_Nodes,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_sibling+roops_core_objects_BinomialHeapNode_child],n],
+          true]
+       implies 
+               (
+                 neq[n.roops_core_objects_BinomialHeapNode_child,
+                    null]
+                 implies 
+                         equ[fun_set_size[fun_reach[(n.roops_core_objects_BinomialHeapNode_child).roops_core_objects_BinomialHeapNode_child,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling]],
+                            fun_set_size[fun_reach[(n.roops_core_objects_BinomialHeapNode_child).roops_core_objects_BinomialHeapNode_sibling,roops_core_objects_BinomialHeapNode,roops_core_objects_BinomialHeapNode_child+roops_core_objects_BinomialHeapNode_sibling]]]
+               )
+     
+     }
+   )
+
+}
+pred postcondition_roops_core_objects_BinomialHeap_generateInvariant[
+  roops_core_objects_BinomialHeapNode_child':univ->univ,
+  roops_core_objects_BinomialHeapNode_degree':univ->univ,
+  roops_core_objects_BinomialHeapNode_key':univ->univ,
+  roops_core_objects_BinomialHeapNode_parent':univ->univ,
+  roops_core_objects_BinomialHeapNode_sibling':univ->univ,
+  roops_core_objects_BinomialHeap_Nodes':univ->univ,
+  roops_core_objects_BinomialHeap_size':univ->univ,
+  thiz':univ,
+  throw':univ
+]{
+   roops_core_objects_BinomialHeap_ensures[throw']
+   and 
+   roops_core_objects_BinomialHeap_object_invariant[roops_core_objects_BinomialHeapNode_child',
+                                                   roops_core_objects_BinomialHeapNode_degree',
+                                                   roops_core_objects_BinomialHeapNode_key',
+                                                   roops_core_objects_BinomialHeapNode_parent',
+                                                   roops_core_objects_BinomialHeapNode_sibling',
+                                                   roops_core_objects_BinomialHeap_Nodes',
+                                                   roops_core_objects_BinomialHeap_size',
+                                                   thiz']
+
+}
+pred roops_core_objects_BinomialHeap_ensures[
+  throw':univ
+]{
+   (
+     throw'=null)
+   implies 
+           liftExpression[true]
+
+}
+pred roops_core_objects_BinomialHeap_requires[
+]{
+   true=true
+
+}
+//-------------- java_io_PrintStream--------------//
+sig java_io_PrintStream extends java_lang_Object {}
+{}
+
+
+
+
+//-------------- java_lang_Boolean--------------//
+sig java_lang_Boolean extends java_lang_Object {}
+{}
+
+
+
+pred havocVariable2[
+  u_1:univ -> univ
+]{
+  TruePred[]
+  and 
+  havocVariable2Post[u_1]
+}
+
+
+pred updateField[
+  l_0:univ,
+  f_0:univ -> univ,
+  f_1:univ -> univ,
+  r_0:univ
+]{
+  TruePred[]
+  and 
+  updateFieldPost[f_1,
+                 f_0,
+                 l_0,
+                 r_0]
+}
+
+
+pred havocVariable3[
+  u_1:univ -> ( seq univ )
+]{
+  TruePred[]
+  and 
+  havocVariable3Post[u_1]
+}
+
+
+pred havocListSeq[
+  target_0:univ,
+  field_0:univ -> Int -> univ,
+  field_1:univ -> Int -> univ
+]{
+  TruePred[]
+  and 
+  havocListSeqPost[target_0,
+                  field_0,
+                  field_1]
+}
+
+
+pred getUnusedObject[
+  n_1:java_lang_Object + null,
+  usedObjects_0:set java_lang_Object,
+  usedObjects_1:set java_lang_Object
+]{
+  TruePred[]
+  and 
+  getUnusedObjectPost[usedObjects_1,
+                     usedObjects_0,
+                     n_1]
+}
+
+
+pred updateVariable[
+  l_1:univ,
+  r_0:univ
+]{
+  TruePred[]
+  and 
+  equ[l_1,
+     r_0]
+}
+
+
+pred havocFieldContents[
+  target_0:univ,
+  field_0:univ -> univ,
+  field_1:univ -> univ
+]{
+  TruePred[]
+  and 
+  havocFieldContentsPost[target_0,
+                        field_0,
+                        field_1]
+}
+
+
+pred havocVariable[
+  v_1:univ
+]{
+  TruePred[]
+  and 
+  havocVarPost[v_1]
+}
+
+
+pred havocField[
+  f_0:univ -> univ,
+  f_1:univ -> univ,
+  u_0:univ
+]{
+  TruePred[]
+  and 
+  havocFieldPost[f_0,
+                f_1,
+                u_0]
+}
+
+
+pred roops_core_objects_BinomialHeap_generateInvariant[
+  thiz_0:roops_core_objects_BinomialHeap,
+  throw_1:java_lang_Throwable + null,
+  throw_2:java_lang_Throwable + null,
+  roops_core_objects_BinomialHeap_Nodes_0:( roops_core_objects_BinomialHeap ) -> one ( null + roops_core_objects_BinomialHeapNode ),
+  roops_core_objects_BinomialHeap_Nodes_1:( roops_core_objects_BinomialHeap ) -> one ( null + roops_core_objects_BinomialHeapNode ),
+  exit_stmt_reached_1:boolean
+]{
+  TruePred[]
+  and 
+  (
+    throw_1=null)
+  and 
+  TruePred[]
+  and 
+  (
+    exit_stmt_reached_1=false)
+  and 
+  (
+    (
+      roops_core_objects_BinomialHeapCondition2[exit_stmt_reached_1,
+                                               throw_1]
+      and 
+      (
+        (
+          roops_core_objects_BinomialHeapCondition0[thiz_0]
+          and 
+          (
+            throw_2=java_lang_NullPointerExceptionLit)
+          and 
+          (
+            roops_core_objects_BinomialHeap_Nodes_0=roops_core_objects_BinomialHeap_Nodes_1)
+        )
+        or 
+        (
+          (
+            not (
+              roops_core_objects_BinomialHeapCondition0[thiz_0])
+          )
+          and 
+          (
+            roops_core_objects_BinomialHeap_Nodes_1=(roops_core_objects_BinomialHeap_Nodes_0)++((thiz_0)->(thiz_0.roops_core_objects_BinomialHeap_Nodes_0)))
+          and 
+          (
+            throw_1=throw_2)
+        )
+      )
+    )
+    or 
+    (
+      (
+        not (
+          roops_core_objects_BinomialHeapCondition2[exit_stmt_reached_1,
+                                                   throw_1]
+        )
+      )
+      and 
+      TruePred[]
+      and 
+      (
+        roops_core_objects_BinomialHeap_Nodes_0=roops_core_objects_BinomialHeap_Nodes_1)
+      and 
+      (
+        throw_1=throw_2)
+    )
+  )
+  and 
+  TruePred[]
+
+}
+
+//-------------SMB sigs-------------// 
+one sig roops_core_objects_BinomialHeap_0 extends roops_core_objects_BinomialHeap {} 
+
+one sig roops_core_objects_BinomialHeapNode_0, roops_core_objects_BinomialHeapNode_1, roops_core_objects_BinomialHeapNode_2, roops_core_objects_BinomialHeapNode_3, roops_core_objects_BinomialHeapNode_4, roops_core_objects_BinomialHeapNode_5, roops_core_objects_BinomialHeapNode_6, roops_core_objects_BinomialHeapNode_7, roops_core_objects_BinomialHeapNode_8, roops_core_objects_BinomialHeapNode_9, roops_core_objects_BinomialHeapNode_10, roops_core_objects_BinomialHeapNode_11, roops_core_objects_BinomialHeapNode_12 extends roops_core_objects_BinomialHeapNode {} 
+
+fact {  no ( QF.froops_core_objects_BinomialHeapNode_parent_0.univ & QF.broops_core_objects_BinomialHeapNode_parent_0.univ ) and 
+  roops_core_objects_BinomialHeapNode = QF.froops_core_objects_BinomialHeapNode_parent_0.univ + QF.broops_core_objects_BinomialHeapNode_parent_0.univ 
+}
+fact {  no ( QF.froops_core_objects_BinomialHeapNode_sibling_0.univ & QF.broops_core_objects_BinomialHeapNode_sibling_0.univ ) and 
+  roops_core_objects_BinomialHeapNode = QF.froops_core_objects_BinomialHeapNode_sibling_0.univ + QF.broops_core_objects_BinomialHeapNode_sibling_0.univ 
+}
+fact {  no ( QF.froops_core_objects_BinomialHeapNode_child_0.univ & QF.broops_core_objects_BinomialHeapNode_child_0.univ ) and 
+  roops_core_objects_BinomialHeapNode = QF.froops_core_objects_BinomialHeapNode_child_0.univ + QF.broops_core_objects_BinomialHeapNode_child_0.univ 
+}
+//-----SMB: local_ordering()-----//
+fun next_roops_core_objects_BinomialHeap [] : roops_core_objects_BinomialHeap -> lone roops_core_objects_BinomialHeap { 
+none -> none 
+}
+fun min_roops_core_objects_BinomialHeap [os: set roops_core_objects_BinomialHeap] : lone roops_core_objects_BinomialHeap {
+  os - os.^(next_roops_core_objects_BinomialHeap[]) 
+}
+fun prevs_roops_core_objects_BinomialHeap[o : roops_core_objects_BinomialHeap] : set roops_core_objects_BinomialHeap {
+  o.^(~next_roops_core_objects_BinomialHeap[]) 
+}
+fun next_roops_core_objects_BinomialHeapNode [] : roops_core_objects_BinomialHeapNode -> lone roops_core_objects_BinomialHeapNode { 
+  roops_core_objects_BinomialHeapNode_0 -> roops_core_objects_BinomialHeapNode_1 +
+  roops_core_objects_BinomialHeapNode_1 -> roops_core_objects_BinomialHeapNode_2 +
+  roops_core_objects_BinomialHeapNode_2 -> roops_core_objects_BinomialHeapNode_3 +
+  roops_core_objects_BinomialHeapNode_3 -> roops_core_objects_BinomialHeapNode_4 +
+  roops_core_objects_BinomialHeapNode_4 -> roops_core_objects_BinomialHeapNode_5 +
+  roops_core_objects_BinomialHeapNode_5 -> roops_core_objects_BinomialHeapNode_6 +
+  roops_core_objects_BinomialHeapNode_6 -> roops_core_objects_BinomialHeapNode_7 +
+  roops_core_objects_BinomialHeapNode_7 -> roops_core_objects_BinomialHeapNode_8 +
+  roops_core_objects_BinomialHeapNode_8 -> roops_core_objects_BinomialHeapNode_9 +
+  roops_core_objects_BinomialHeapNode_9 -> roops_core_objects_BinomialHeapNode_10 +
+  roops_core_objects_BinomialHeapNode_10 -> roops_core_objects_BinomialHeapNode_11 +
+  roops_core_objects_BinomialHeapNode_11 -> roops_core_objects_BinomialHeapNode_12 
+}
+fun min_roops_core_objects_BinomialHeapNode [os: set roops_core_objects_BinomialHeapNode] : lone roops_core_objects_BinomialHeapNode {
+  os - os.^(next_roops_core_objects_BinomialHeapNode[]) 
+}
+fun prevs_roops_core_objects_BinomialHeapNode[o : roops_core_objects_BinomialHeapNode] : set roops_core_objects_BinomialHeapNode {
+  o.^(~next_roops_core_objects_BinomialHeapNode[]) 
+}
+//-----SMB: global_ordering()-----//
+fun globalNext[]: java_lang_Object -> lone java_lang_Object {
+roops_core_objects_BinomialHeap_0 -> roops_core_objects_BinomialHeapNode_0  +  roops_core_objects_BinomialHeapNode_0 -> roops_core_objects_BinomialHeapNode_1  +  roops_core_objects_BinomialHeapNode_1 -> roops_core_objects_BinomialHeapNode_2  +  roops_core_objects_BinomialHeapNode_2 -> roops_core_objects_BinomialHeapNode_3  +  roops_core_objects_BinomialHeapNode_3 -> roops_core_objects_BinomialHeapNode_4  +  roops_core_objects_BinomialHeapNode_4 -> roops_core_objects_BinomialHeapNode_5  +  roops_core_objects_BinomialHeapNode_5 -> roops_core_objects_BinomialHeapNode_6  +  roops_core_objects_BinomialHeapNode_6 -> roops_core_objects_BinomialHeapNode_7  +  roops_core_objects_BinomialHeapNode_7 -> roops_core_objects_BinomialHeapNode_8  +  roops_core_objects_BinomialHeapNode_8 -> roops_core_objects_BinomialHeapNode_9  +  roops_core_objects_BinomialHeapNode_9 -> roops_core_objects_BinomialHeapNode_10  +  roops_core_objects_BinomialHeapNode_10 -> roops_core_objects_BinomialHeapNode_11  +  roops_core_objects_BinomialHeapNode_11 -> roops_core_objects_BinomialHeapNode_12
+}
+fun globalMin[s : set java_lang_Object] : lone java_lang_Object {
+s - s.^globalNext[] 
+}
+//-----SMB: define_min_parent()-----//
+fun minP_roops_core_objects_BinomialHeapNode [o : roops_core_objects_BinomialHeapNode] : java_lang_Object {
+  globalMin[(QF.roops_core_objects_BinomialHeap_Nodes_0 + QF.froops_core_objects_BinomialHeapNode_parent_0 + QF.froops_core_objects_BinomialHeapNode_sibling_0 + QF.froops_core_objects_BinomialHeapNode_child_0).o]
+}
+//-----SMB: define_freach()-----//
+fun FReach[] : set java_lang_Object {
+(QF.thiz_0).*(QF.roops_core_objects_BinomialHeapNode_degree_0 + QF.roops_core_objects_BinomialHeap_Nodes_0 + QF.roops_core_objects_BinomialHeapNode_key_0 + QF.roops_core_objects_BinomialHeap_size_0 + QF.froops_core_objects_BinomialHeapNode_parent_0 + QF.froops_core_objects_BinomialHeapNode_sibling_0 + QF.froops_core_objects_BinomialHeapNode_child_0) - null
+}
+//-----SMB: order_root_nodes()-----//
+//-----SMB: root_is_minimum()-----//
+fact {((QF.thiz_0 != null) implies QF.thiz_0 = roops_core_objects_BinomialHeap_0 )
+}
+//-----SMB: order_same_min_parent()-----//
+fact { all disj o1, o2: roops_core_objects_BinomialHeapNode |
+  let p1=minP_roops_core_objects_BinomialHeapNode[o1]|
+  let p2=minP_roops_core_objects_BinomialHeapNode[o2]|
+  (o1+o2 in FReach[] and
+  some p1 and some p2 and
+  p1=p2 and p1 in roops_core_objects_BinomialHeapNode) implies 
+(((p1.((QF.froops_core_objects_BinomialHeapNode_parent_0))=o1 and p1.((QF.froops_core_objects_BinomialHeapNode_sibling_0))=o2) implies
+  o2 = o1.next_roops_core_objects_BinomialHeapNode[])
+and((p1.((QF.froops_core_objects_BinomialHeapNode_parent_0))=o1  and minP_roops_core_objects_BinomialHeapNode[p1.((QF.froops_core_objects_BinomialHeapNode_sibling_0))] != p1 and p1.((QF.froops_core_objects_BinomialHeapNode_child_0))=o2) implies
+  o2 = o1.next_roops_core_objects_BinomialHeapNode[])
+and((p1.((QF.froops_core_objects_BinomialHeapNode_sibling_0))=o1 and p1.((QF.froops_core_objects_BinomialHeapNode_child_0))=o2) implies
+  o2 = o1.next_roops_core_objects_BinomialHeapNode[])
+)
+}
+//-----SMB: order_same_min_parent_type()-----//
+fact { all disj o1, o2:roops_core_objects_BinomialHeapNode |
+  let p1=minP_roops_core_objects_BinomialHeapNode[o1]|
+  let p2=minP_roops_core_objects_BinomialHeapNode[o2]|
+  (o1 + o2 in FReach[] and
+  some p1 and some p2 and
+  p1!=p2 and p1+p2 in roops_core_objects_BinomialHeapNode and p1 in prevs_roops_core_objects_BinomialHeapNode[p2] )
+  implies o1 in prevs_roops_core_objects_BinomialHeapNode[o2]
+}
+//-----SMB: order_diff_min_parent_type()-----//
+fact { all disj o1, o2:roops_core_objects_BinomialHeapNode |
+  let p1=minP_roops_core_objects_BinomialHeapNode[o1]|
+  let p2=minP_roops_core_objects_BinomialHeapNode[o2]|
+  ( o1+o2 in FReach[] and
+ some p1 and some p2 and
+p1 in roops_core_objects_BinomialHeap and p2 in roops_core_objects_BinomialHeapNode )
+implies o1 in prevs_roops_core_objects_BinomialHeapNode[o2]
+}
+//-----SMB: avoid_holes()-----//
+fact { all o : roops_core_objects_BinomialHeap | 
+  o in FReach[] implies
+   prevs_roops_core_objects_BinomialHeap[o] in FReach[]
+}
+fact { all o : roops_core_objects_BinomialHeapNode | 
+  o in FReach[] implies
+   prevs_roops_core_objects_BinomialHeapNode[o] in FReach[]
+}
+/*
+type ordering:
+==============
+1) roops_core_objects_BinomialHeap
+2) roops_core_objects_BinomialHeapNode
+
+root nodes ordering:
+====================
+1) thiz:roops_core_objects_BinomialHeap
+
+recursive field ordering:
+=========================
+1) roops_core_objects_BinomialHeapNode_parent:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode)
+2) roops_core_objects_BinomialHeapNode_sibling:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode)
+3) roops_core_objects_BinomialHeapNode_child:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode)
+
+non-recursive field ordering:
+=============================
+1) roops_core_objects_BinomialHeap_Nodes:(roops_core_objects_BinomialHeap)->one(null+roops_core_objects_BinomialHeapNode)
+2) roops_core_objects_BinomialHeap_size:(roops_core_objects_BinomialHeap)->one(Int)
+3) roops_core_objects_BinomialHeapNode_key:(roops_core_objects_BinomialHeapNode)->one(Int)
+4) roops_core_objects_BinomialHeapNode_degree:(roops_core_objects_BinomialHeapNode)->one(Int)
+*/
+//-----UPPER BOUND -----//
+fact {  (QF).(broops_core_objects_BinomialHeapNode_child_0) in 
+none->none
+}
+//-----UPPER BOUND -----//
+fact {  (QF).(broops_core_objects_BinomialHeapNode_parent_0) in 
+roops_core_objects_BinomialHeapNode_1->roops_core_objects_BinomialHeapNode_0
++roops_core_objects_BinomialHeapNode_10->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_10->roops_core_objects_BinomialHeapNode_6
++roops_core_objects_BinomialHeapNode_10->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_11->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_11->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_12->roops_core_objects_BinomialHeapNode_8
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_0
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_0
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_9->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_9->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_9->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_9->roops_core_objects_BinomialHeapNode_6
+}
+//-----UPPER BOUND -----//
+fact {  (QF).(broops_core_objects_BinomialHeapNode_sibling_0) in 
+none->none
+}
+//-----UPPER BOUND -----//
+fact {  (QF).(froops_core_objects_BinomialHeapNode_child_0) in 
+roops_core_objects_BinomialHeapNode_0->null
++roops_core_objects_BinomialHeapNode_0->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_0->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_1->null
++roops_core_objects_BinomialHeapNode_1->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_1->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_10->null
++roops_core_objects_BinomialHeapNode_11->null
++roops_core_objects_BinomialHeapNode_12->null
++roops_core_objects_BinomialHeapNode_2->null
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_3->null
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_6
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_4->null
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_6
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_8
++roops_core_objects_BinomialHeapNode_5->null
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_8
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_9
++roops_core_objects_BinomialHeapNode_6->null
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_10
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_9
++roops_core_objects_BinomialHeapNode_7->null
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_10
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_11
++roops_core_objects_BinomialHeapNode_8->null
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_12
++roops_core_objects_BinomialHeapNode_9->null
+}
+//-----UPPER BOUND -----//
+fact {  (QF).(froops_core_objects_BinomialHeapNode_parent_0) in 
+roops_core_objects_BinomialHeapNode_0->null
++roops_core_objects_BinomialHeapNode_1->null
++roops_core_objects_BinomialHeapNode_10->null
++roops_core_objects_BinomialHeapNode_11->null
++roops_core_objects_BinomialHeapNode_12->null
++roops_core_objects_BinomialHeapNode_2->null
++roops_core_objects_BinomialHeapNode_3->null
++roops_core_objects_BinomialHeapNode_4->null
++roops_core_objects_BinomialHeapNode_5->null
++roops_core_objects_BinomialHeapNode_6->null
++roops_core_objects_BinomialHeapNode_7->null
++roops_core_objects_BinomialHeapNode_8->null
++roops_core_objects_BinomialHeapNode_9->null
+}
+//-----UPPER BOUND -----//
+fact {  (QF).(froops_core_objects_BinomialHeapNode_sibling_0) in 
+roops_core_objects_BinomialHeapNode_0->null
++roops_core_objects_BinomialHeapNode_0->roops_core_objects_BinomialHeapNode_1
++roops_core_objects_BinomialHeapNode_1->null
++roops_core_objects_BinomialHeapNode_1->roops_core_objects_BinomialHeapNode_2
++roops_core_objects_BinomialHeapNode_10->null
++roops_core_objects_BinomialHeapNode_11->null
++roops_core_objects_BinomialHeapNode_12->null
++roops_core_objects_BinomialHeapNode_2->null
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_3
++roops_core_objects_BinomialHeapNode_2->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_3->null
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_4
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_3->roops_core_objects_BinomialHeapNode_6
++roops_core_objects_BinomialHeapNode_4->null
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_5
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_6
++roops_core_objects_BinomialHeapNode_4->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_5->null
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_7
++roops_core_objects_BinomialHeapNode_5->roops_core_objects_BinomialHeapNode_8
++roops_core_objects_BinomialHeapNode_6->null
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_8
++roops_core_objects_BinomialHeapNode_6->roops_core_objects_BinomialHeapNode_9
++roops_core_objects_BinomialHeapNode_7->null
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_10
++roops_core_objects_BinomialHeapNode_7->roops_core_objects_BinomialHeapNode_9
++roops_core_objects_BinomialHeapNode_8->null
++roops_core_objects_BinomialHeapNode_8->roops_core_objects_BinomialHeapNode_11
++roops_core_objects_BinomialHeapNode_9->null
+}
+one sig QF {
+  broops_core_objects_BinomialHeapNode_child_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode)),
+  broops_core_objects_BinomialHeapNode_parent_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode)),
+  broops_core_objects_BinomialHeapNode_sibling_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode)),
+  froops_core_objects_BinomialHeapNode_child_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode + null)),
+  froops_core_objects_BinomialHeapNode_parent_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode + null)),
+  froops_core_objects_BinomialHeapNode_sibling_0:(roops_core_objects_BinomialHeapNode) -> lone((roops_core_objects_BinomialHeapNode + null)),
+  l0_exit_stmt_reached_1:boolean,
+  roops_core_objects_BinomialHeapNode_degree_0:( roops_core_objects_BinomialHeapNode ) -> one ( Int ),
+  roops_core_objects_BinomialHeapNode_key_0:( roops_core_objects_BinomialHeapNode ) -> one ( Int ),
+  roops_core_objects_BinomialHeap_Nodes_0:( roops_core_objects_BinomialHeap ) -> one ( null + roops_core_objects_BinomialHeapNode ),
+  roops_core_objects_BinomialHeap_Nodes_1:( roops_core_objects_BinomialHeap ) -> one ( null + roops_core_objects_BinomialHeapNode ),
+  roops_core_objects_BinomialHeap_size_0:( roops_core_objects_BinomialHeap ) -> one ( Int ),
+  thiz_0:roops_core_objects_BinomialHeap,
+  throw_0:java_lang_Throwable + null,
+  throw_1:java_lang_Throwable + null,
+  throw_2:java_lang_Throwable + null
+}
+
+
+run {roops_core_objects_BinomialHeap_object_invariant[(QF.broops_core_objects_BinomialHeapNode_child_0)+(QF.froops_core_objects_BinomialHeapNode_child_0),QF.roops_core_objects_BinomialHeapNode_degree_0,QF.roops_core_objects_BinomialHeapNode_key_0,(QF.broops_core_objects_BinomialHeapNode_parent_0)+(QF.froops_core_objects_BinomialHeapNode_parent_0),(QF.broops_core_objects_BinomialHeapNode_sibling_0)+(QF.froops_core_objects_BinomialHeapNode_sibling_0),QF.roops_core_objects_BinomialHeap_Nodes_0,QF.roops_core_objects_BinomialHeap_size_0,QF.thiz_0]
+
+} for 0 but  17 java_lang_Object, exactly 13 roops_core_objects_BinomialHeapNode, exactly 1 roops_core_objects_BinomialHeap, exactly 1 java_io_PrintStream, exactly 2 java_lang_Boolean,5 int
+
+fact {  roops_core_objects_BinomialHeap_generateInvariant[QF.thiz_0,
+                                                   QF.throw_1,
+                                                   QF.throw_2,
+                                                   QF.roops_core_objects_BinomialHeap_Nodes_0,
+                                                   QF.roops_core_objects_BinomialHeap_Nodes_1,
+                                                   QF.l0_exit_stmt_reached_1]
+
+}
+
+assert check_roops_core_objects_BinomialHeap_generateInvariant{
+  postcondition_roops_core_objects_BinomialHeap_generateInvariant[(QF.broops_core_objects_BinomialHeapNode_child_0)+(QF.froops_core_objects_BinomialHeapNode_child_0),
+                                                                 QF.roops_core_objects_BinomialHeapNode_degree_0,
+                                                                 QF.roops_core_objects_BinomialHeapNode_key_0,
+                                                                 (QF.broops_core_objects_BinomialHeapNode_parent_0)+(QF.froops_core_objects_BinomialHeapNode_parent_0),
+                                                                 (QF.broops_core_objects_BinomialHeapNode_sibling_0)+(QF.froops_core_objects_BinomialHeapNode_sibling_0),
+                                                                 QF.roops_core_objects_BinomialHeap_Nodes_1,
+                                                                 QF.roops_core_objects_BinomialHeap_size_0,
+                                                                 QF.thiz_0,
+                                                                 QF.throw_2]
+}

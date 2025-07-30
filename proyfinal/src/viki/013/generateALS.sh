@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -cp .:alsgen.jar:alsgen/lib/junit-4.8.2.jar:alsgen/bin:alsgen/lib/dynalloy4.jar:alsgen/lib/alloyRunner.jar:alsgen/lib/antlr-4.3-complete.jar:alsgen/lib/commons-collections-3.2.1.jar:alsgen/lib/commons-configuration-1.6.jar:alsgen/lib/commons-lang-2.4.jar:alsgen/lib/commons-logging-1.1.1.jar:alsgen/lib/edu.mit.csail.sdg.annotations_0.2.5.jar:alsgen/lib/guava-16.0.1.jar:alsgen/lib/javassist.jar:alsgen/lib/jdynalloy.jar:alsgen/lib/jml-release.jar:alsgen/lib/log4j-1.2.15.jar:alsgen/lib/mujava++.jar:alsgen/lib/objenesis-2.6.jar:alsgen/lib/org.hamcrest.core_1.3.0.v201303031735.jar:alsgen/lib/recoder.jar:alsgen/lib/reflections-0.9.9-RC1.jar  org.junit.runner.JUnitCore $@

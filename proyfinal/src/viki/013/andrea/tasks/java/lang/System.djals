@@ -1,0 +1,17 @@
+//-------------- java_lang_System --------------//
+module java_lang_System
+sig java_lang_System extends java_lang_Object {}
+{}
+program java_lang_System::currentTimeMillis[
+  var throw:java_lang_Throwable+null,
+  var return:JavaPrimitiveLongValue] 
+Implementation 
+
+   {
+      throw:=null;
+      havoc return;
+   
+   }
+
+
+

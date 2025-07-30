@@ -2,6 +2,8 @@ import andrea.settings
 import andrea.network
 import sys, os, getopt, time
 
+sys.path.append('/home/gajimenez7/projects/MUCHO-TACO/proyfinal/src/viki/013/andrea')
+
 from andrea.andrea   import *
 from andrea.utils    import ensure_directory
 from andrea.utils    import secs2human
@@ -20,35 +22,39 @@ def main():
 
     config_path = parse_cmd_line()
 
-    print("Debug-mfrias4: viki.py line 23: config_path = ", config_path)
+    #print("Debug-mfrias4: viki.py line 23: config_path = ", config_path)
 
     config_path = os.path.abspath(config_path)
 
-    print("Debug-mfrias4: viki.py line 27: config_path second occurrence = ", config_path)
+    #print("Debug-mfrias4: viki.py line 27: config_path second occurrence = ", config_path)
 
     andrea.settings.read(config_path)
     settings.trola_output_dir = os.path.join(andrea.settings.local_store(), andrea.settings.experiment['full_id'], "trola")
 
-    print("Debug-mfrias4: viki.py line 32: trola_output_dir = ", settings.trola_output_dir)
+    #print("Debug-mfrias4: viki.py line 32: trola_output_dir = ", settings.trola_output_dir)
 
     andrea.network.sync_zero_time()
     sleep(andrea.network.map.my_rank * 0.05)
 
-    print("Debug-mfrias4: viki.py line 37: andrea.network.map = ", andrea.network.map)
+    #print("Debug-mfrias4: viki.py line 37: andrea.network.map = ", andrea.network.map)
 
     create_output_file(andrea.network.map, config_path, show_welcome_banner, config_path, VIKI_LOGO)
 
-    print("Debug-mfrias4: viki.py line 37: created output file in ", config_path)
+    #print("Debug-mfrias4: viki.py line 37: created output file in ", config_path)
 
     role2class = dict({Role.M: AlsPartitionerMaster, Role.W: InfiniteTimeoutWorker})
 
     my_class = role2class[andrea.network.map.my_role]
 
-    print("Debug-mfrias4: viki.py line 47 my_class = ", my_class)
+    #print("Debug-mfrias4: viki.py line 47 my_class = ", my_class)
 
     me = my_class()
 
+    if andrea.network.map.am_master():
+        print ('\n', 'viki', VIKI_VERSION)
+
     me.start()
+
     me.cleanup()
 
     if andrea.network.map.am_master():
@@ -60,6 +66,7 @@ def parse_cmd_line():
     """
     Punto de entrada.
     """
+
     if len(sys.argv) < 1:
         if andrea.network.map.am_master():
             show_usage()
@@ -70,10 +77,10 @@ def parse_cmd_line():
              (('-p', '--process-map'), show_process_map))
 
     for switch, function in modes:
-        print('esto es switch ', switch , ' || ')
+        #print('esto es switch ', switch , ' || ')
         # print('esto es argv ', argv, ' ||')
         if sys.argv[1].startswith(switch):
-            print("Debug-mfrias4. viki line 60")
+            #print("Debug-mfrias4. viki line 60")
             if andrea.network.map.am_master():
                 if function():
                     sys.exit(0)
@@ -85,7 +92,7 @@ def parse_cmd_line():
     nrels = 0
     
     for opt, val in opts:
-        print("current val is", val)
+        #print("current val is", val)
         if opt in ('-r', '--rel'):
             settings.rels[nrels] = val
             nrels += 1
@@ -138,14 +145,15 @@ VIKI_VERSION = '0.1.2 (nueva con mejor log + distr + autoTO, fix distr + polishe
 
 VIKI_LOGO = """
 
-__      _______ _  _______ 
-\ \    / /_   _| |/ /_   _|
- \ \  / /  | | | ' /  | |  
-  \ \/ /   | | |  <   | |  
-   \  /   _| |_| . \ _| |_ 
-    \/   |_____|_|\_\_____|  vVERSION
-
-
+ /$$      /$$ /$$   /$$  /$$$$$$  /$$   /$$  /$$$$$$       /$$$$$$$$ /$$$$$$   /$$$$$$   /$$$$$$  
+| $$$    /$$$| $$  | $$ /$$__  $$| $$  | $$ /$$__  $$     |__  $$__//$$__  $$  /$$__  $$ /$$__ $$ 
+| $$$$  /$$$$| $$  | $$| $$  \__/| $$  | $$| $$  \ $$        | $$  | $$  \ $$| $$  \__/| $$  \ $$ 
+| $$ $$/$$ $$| $$  | $$| $$      | $$$$$$$$| $$  | $$ /$$$$$$| $$  | $$$$$$$$| $$      | $$  | $$ 
+| $$  $$$| $$| $$  | $$| $$      | $$__  $$| $$  | $$|______/| $$  | $$__  $$| $$      | $$  | $$ 
+| $$\  $ | $$| $$  | $$| $$    $$| $$  | $$| $$  | $$        | $$  | $$  | $$| $$    $$| $$  | $$ 
+| $$ \/  | $$|  $$$$$$/|  $$$$$$/| $$  | $$|  $$$$$$/        | $$  | $$  | $$|  $$$$$$/|  $$$$$$/ 
+|__/     |__/ \______/  \______/ |__/  |__/ \______/         |__/  |__/  |__/ \______/  \______/  
+                                                                             
 """.replace('VERSION', VIKI_VERSION)
 
 

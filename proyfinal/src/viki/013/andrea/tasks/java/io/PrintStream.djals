@@ -1,0 +1,29 @@
+//-------------- java_io_PrintStream --------------//
+module java_io_PrintStream
+sig java_io_PrintStream extends java_lang_Object {}
+{}
+program java_io_PrintStream::print[
+  var thiz:java_io_PrintStream,
+  var throw:java_lang_Throwable+null,
+  var theString:java_lang_String] 
+Implementation 
+
+   {
+      throw:=null;
+   
+   }
+
+
+program java_io_PrintStream::println[
+  var thiz:java_io_PrintStream,
+  var throw:java_lang_Throwable+null,
+  var theString:java_lang_String] 
+Implementation 
+
+   {
+      throw:=null;
+   
+   }
+
+
+

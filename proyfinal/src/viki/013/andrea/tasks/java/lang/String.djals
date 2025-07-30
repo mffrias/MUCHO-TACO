@@ -1,0 +1,16 @@
+//-------------- java_lang_String --------------//
+module java_lang_String
+sig java_lang_String extends java_lang_Object {}
+{}
+program java_lang_String::Constructor[
+  var thiz:java_lang_ObjectArray,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   {
+      throw:=null;
+   
+   }
+
+
+

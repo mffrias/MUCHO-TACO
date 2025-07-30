@@ -17,7 +17,7 @@ def secs2human(s, msecs=True):
     s -= h*60*60
     m = int(s / 60)
     s -= m*60
-    print("Debug-mfrias4 utils.py line 20, h = ", h, " m = ", m, "s = ", s, "ms = ", ms)
+    #print("Debug-mfrias4 utils.py line 20, h = ", h, " m = ", m, "s = ", s, "ms = ", ms)
     if msecs:
         return '%s.%03d' % ( str(datetime.time(int(h), int(m), int(s))), ms )
     else:
@@ -89,16 +89,15 @@ def list_all_files(path, exts):
     file (not a directory), it will be the only candidate for a match.
     """
 
-    print ("Debug-mfrias4: utils.py line 88. path = ", path);
-    print ("Debug-mfrias4: utils.py line 89. exts = ", exts);
-    print ("Debug-mfrias4: utils.py line 90. os.path.isdir(concretepath) = ", os.path.isdir('/Users/mpiuser/Desktop/MUCHO-TACO-CODE/proyfinal/src/viki/013/andrea/tasks'));
-    print ("Debug-mfrias4: utils.py line 91. repr(path) = ", repr(path))
+    #print("Debug-mfrias4: utils.py line 88. path = ", path);
+    #print("Debug-mfrias4: utils.py line 89. exts = ", exts);
+    #print("Debug-mfrias4: utils.py line 91. repr(path) = ", repr(path))
 
     if os.path.isfile(path):
-        print ("Debug-mfrias4: utils.py line 92. Entered if.")
+        #print("Debug-mfrias4: utils.py line 92. Entered if.")
         return [path] if path.endswith(exts) else []
     elif os.path.isdir(path):
-        print ("Debug-mfrias4: utils.py line 92. Entered elsif.")
+        #print("Debug-mfrias4: utils.py line 92. Entered elsif.")
         result = []
         for (dir, subdirs, files) in os.walk(path):
             result += map(lambda f: dir + "/" + f,
@@ -146,7 +145,7 @@ class RoundRobin:
 class Tabulator:
     
     def __init__(self, output, titles, widths, aligns):
-        print("widths :", widths, " aligns :", aligns)
+        #print("widths :", widths, " aligns :", aligns)
         self.num_cols = len(aligns)
         if not (self.num_cols == len(widths)):
             raise Exception("Widths and aligns must have equal length.")
@@ -170,7 +169,7 @@ class Tabulator:
         self.output.flush()
 
     def add_line(self):
-        print("Debug-mfrias4 utils.py line 169, add_line with output = ", self.output)
+        #print("Debug-mfrias4 utils.py line 169, add_line with output = ", self.output)
         self.output.write(self.make_hline())
 
     def make_row(self, values):

@@ -1,21 +1,16 @@
-Reading from standard input... Use '--help' for help.
-============================[ Problem Statistics ]=============================
-|                                                                             |
-|  Number of variables:         69608                                         |
-|  Number of clauses:          118081                                         |
-|  Parse time:                   0.01 s                                       |
-|                                                                             |
-============================[ Search Statistics ]==============================
-| Conflicts |          ORIGINAL         |          LEARNT          | Progress |
-|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |
-===============================================================================
-===============================================================================
+Reading from standard input... Use '-h' or '--help' for help.
+==================================[MINISAT]===================================
+| Conflicts |     ORIGINAL     |              LEARNT              | Progress |
+|           | Clauses Literals |   Limit Clauses Literals  Lit/Cl |          |
+==============================================================================
+|         0 |  115887   286784 |   38629       0        0     nan |  0.000 % |
+==============================================================================
 restarts              : 1
-conflicts             : 88             (4804 /sec)
-decisions             : 35119          (0.00 % random) (1917081 /sec)
-propagations          : 69830          (3811889 /sec)
-conflict literals     : 328            (0.00 % deleted)
-Memory used           : 15.11 MB
-CPU time              : 0.018319 s
+conflicts             : 66             (1643 /sec)
+decisions             : 35183          (876005 /sec)
+propagations          : 69810          (1738167 /sec)
+conflict literals     : 262            (0.00 % deleted)
+Memory used           : 10.15 MB
+CPU time              : 0.040163 s
 
 SATISFIABLE

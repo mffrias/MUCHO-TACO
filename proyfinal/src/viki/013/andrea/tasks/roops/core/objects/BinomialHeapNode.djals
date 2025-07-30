@@ -1,0 +1,3204 @@
+//-------------- roops_core_objects_BinomialHeapNode --------------//
+module roops_core_objects_BinomialHeapNode
+sig roops_core_objects_BinomialHeapNode extends java_lang_Object {}
+{}
+field roops_core_objects_BinomialHeapNode_key:(roops_core_objects_BinomialHeapNode)->one(Int) {}
+field roops_core_objects_BinomialHeapNode_degree:(roops_core_objects_BinomialHeapNode)->one(Int) {}
+field roops_core_objects_BinomialHeapNode_parent:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+field roops_core_objects_BinomialHeapNode_sibling:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+field roops_core_objects_BinomialHeapNode_child:(roops_core_objects_BinomialHeapNode)->one(null+roops_core_objects_BinomialHeapNode) {}
+
+program roops_core_objects_BinomialHeapNode::BinomialHeapNode[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var value:Int] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_key:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_degree:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_parent:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_child:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_key:=value;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_degree:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_parent:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_child:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::reverse[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var return:null+roops_core_objects_BinomialHeapNode,
+  var sibl:null+roops_core_objects_BinomialHeapNode] 
+Specification 
+{
+  SpecCase #0 {
+   requires {
+      true=true
+   }
+   
+   requires {
+      not (
+        sibl=null)
+   }
+   
+   ensures {
+      (
+        throw'=null)
+      implies 
+              liftExpression[true]
+   }
+   
+   modifies {
+   EVERYTHING}
+  }
+}
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            var param_sibl_26:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               param_sibl_26:=sibl;
+            } else {
+               skip;
+            };
+            var t_784:boolean;
+            var var_145_ret:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_784:=(neq[thiz.roops_core_objects_BinomialHeapNode_sibling,
+                  null]=>(true)else(false));
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_784=true   {
+                     var t_783:null+roops_core_objects_BinomialHeapNode;
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        if isEmptyOrNull[thiz]
+                        or 
+                        isEmptyOrNull[thiz.roops_core_objects_BinomialHeapNode_sibling]
+                        {
+                           throw:=java_lang_NullPointerExceptionLit;
+                        } else {
+                           call reverse[thiz.roops_core_objects_BinomialHeapNode_sibling,throw,t_783,thiz];
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        var_145_ret:=t_783;
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)
+                  and 
+                  (
+                    true=true){
+                     var_145_ret:=thiz;
+                  } else {
+                     skip;
+                  };
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=param_sibl_26;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if true=true{
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)   {
+                        return:=var_145_ret;
+                        exit_stmt_reached:=true;
+                     
+                     }
+                   else {
+                     skip;
+                  };
+               } else {
+                  skip;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  return:=null;
+                  exit_stmt_reached:=true;
+               
+               }
+             else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::getSize[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var return:Int] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            var t_852:boolean;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_852:=(equ[thiz.roops_core_objects_BinomialHeapNode_child,
+                  null]=>(true)else(false));
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_852=true{
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false){
+                     if true=true{
+                        if (
+                          throw=null)
+                        and 
+                        (
+                          exit_stmt_reached=false)   {
+                              return:=1;
+                              exit_stmt_reached:=true;
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                  } else {
+                     skip;
+                  };
+               } else    {
+                     var t_851:boolean;
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_851:=(equ[thiz.roops_core_objects_BinomialHeapNode_sibling,
+                           null]=>(true)else(false));
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_851=true   {
+                              var t_845:Int;
+                              var t_846:Int;
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 if isEmptyOrNull[thiz]
+                                 or 
+                                 isEmptyOrNull[thiz.roops_core_objects_BinomialHeapNode_child]
+                                 {
+                                    throw:=java_lang_NullPointerExceptionLit;
+                                 } else {
+                                    call getSize[thiz.roops_core_objects_BinomialHeapNode_child,throw,t_845];
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_846:=add[1,t_845];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if true=true{
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)   {
+                                          return:=t_846;
+                                          exit_stmt_reached:=true;
+                                       
+                                       }
+                                     else {
+                                       skip;
+                                    };
+                                 } else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else    {
+                              var t_847:Int;
+                              var t_848:Int;
+                              var t_849:Int;
+                              var t_850:Int;
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 if isEmptyOrNull[thiz]
+                                 or 
+                                 isEmptyOrNull[thiz.roops_core_objects_BinomialHeapNode_child]
+                                 {
+                                    throw:=java_lang_NullPointerExceptionLit;
+                                 } else {
+                                    call getSize[thiz.roops_core_objects_BinomialHeapNode_child,throw,t_847];
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_848:=add[1,t_847];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 if isEmptyOrNull[thiz]
+                                 or 
+                                 isEmptyOrNull[thiz.roops_core_objects_BinomialHeapNode_sibling]
+                                 {
+                                    throw:=java_lang_NullPointerExceptionLit;
+                                 } else {
+                                    call getSize[thiz.roops_core_objects_BinomialHeapNode_sibling,throw,t_849];
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_850:=add[t_848,t_849];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if true=true{
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)   {
+                                          return:=t_850;
+                                          exit_stmt_reached:=true;
+                                       
+                                       }
+                                     else {
+                                       skip;
+                                    };
+                                 } else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                        ;
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+               ;
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  return:=0;
+                  exit_stmt_reached:=true;
+               
+               }
+             else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::findANodeWithKey[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var return:null+roops_core_objects_BinomialHeapNode,
+  var value:Int] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            var param_value_27:Int;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               param_value_27:=value;
+            } else {
+               skip;
+            };
+            var var_149_temp:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_149_temp:=thiz;
+            } else {
+               skip;
+            };
+            var var_150_node:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_150_node:=((null+roops_core_objects_BinomialHeapNode) & (null));
+            } else {
+               skip;
+            };
+            var var_151_breakVariable_8:boolean;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_151_breakVariable_8:=false;
+            } else {
+               skip;
+            };
+            var var_152_breakVariable_7:boolean;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_152_breakVariable_7:=false;
+            } else {
+               skip;
+            };
+            var t_834:boolean;
+            var t_835:boolean;
+            var t_836:boolean;
+            var t_837:boolean;
+            var t_838:boolean;
+            var t_839:boolean;
+            var t_840:boolean;
+            var t_841:boolean;
+            var t_842:boolean;
+            var t_843:boolean;
+            var t_844:boolean;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_835:=Not[var_152_breakVariable_7];
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_835=true   {
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_837:=Not[var_151_breakVariable_8];
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_837=true   {
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_838:=(neq[var_149_temp,
+                                    null]=>(true)else(false));
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_838=true{
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_836:=true;
+                                    } else {
+                                       skip;
+                                    };
+                                 } else {
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_836:=false;
+                                    } else {
+                                       skip;
+                                    };
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_836:=false;
+                           } else {
+                              skip;
+                           };
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_836=true{
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_834:=true;
+                           } else {
+                              skip;
+                           };
+                        } else {
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_834:=false;
+                           } else {
+                              skip;
+                           };
+                        };
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)
+                  and 
+                  (
+                    true=true){
+                     t_834:=false;
+                  } else {
+                     skip;
+                  };
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_834=true   {
+                     var t_829:boolean;
+                     var t_830:boolean;
+                     var t_831:boolean;
+                     var t_832:boolean;
+                     var t_833:boolean;
+                     var t_795:boolean;
+                     var t_800:boolean;
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_795:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_key,
+                           param_value_27]=>(true)else(false));
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_795=true   {
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 var_150_node:=var_149_temp;
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 var_152_breakVariable_7:=true;
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_800:=Not[var_152_breakVariable_7];
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_800=true   {
+                              var t_799:boolean;
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_799:=Not[var_152_breakVariable_7];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_799=true   {
+                                       var t_798:boolean;
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_798:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_child,
+                                             null]=>(true)else(false));
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_798=true{
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                if isEmptyOrNull[var_149_temp]{
+                                                   throw:=java_lang_NullPointerExceptionLit;
+                                                } else {
+                                                   var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                };
+                                             } else {
+                                                skip;
+                                             };
+                                          } else    {
+                                                var t_796:null+roops_core_objects_BinomialHeapNode;
+                                                var t_797:boolean;
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   if isEmptyOrNull[var_149_temp]
+                                                   or 
+                                                   isEmptyOrNull[var_149_temp.roops_core_objects_BinomialHeapNode_child]
+                                                   {
+                                                      throw:=java_lang_NullPointerExceptionLit;
+                                                   } else {
+                                                      call findANodeWithKey[var_149_temp.roops_core_objects_BinomialHeapNode_child,throw,t_796,param_value_27];
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   var_150_node:=t_796;
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_797:=(equ[var_150_node,
+                                                      null]=>(true)else(false));
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_797=true{
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         if isEmptyOrNull[var_149_temp]{
+                                                            throw:=java_lang_NullPointerExceptionLit;
+                                                         } else {
+                                                            var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                         };
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   } else {
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         var_151_breakVariable_8:=true;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                          ;
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_830:=Not[var_152_breakVariable_7];
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_830=true   {
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_832:=Not[var_151_breakVariable_8];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_832=true   {
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_833:=(neq[var_149_temp,
+                                             null]=>(true)else(false));
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_833=true{
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_831:=true;
+                                             } else {
+                                                skip;
+                                             };
+                                          } else {
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_831:=false;
+                                             } else {
+                                                skip;
+                                             };
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_831:=false;
+                                    } else {
+                                       skip;
+                                    };
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_831=true{
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_829:=true;
+                                    } else {
+                                       skip;
+                                    };
+                                 } else {
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_829:=false;
+                                    } else {
+                                       skip;
+                                    };
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_829:=false;
+                           } else {
+                              skip;
+                           };
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_829=true   {
+                              var t_824:boolean;
+                              var t_825:boolean;
+                              var t_826:boolean;
+                              var t_827:boolean;
+                              var t_828:boolean;
+                              var t_801:boolean;
+                              var t_806:boolean;
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_801:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_key,
+                                    param_value_27]=>(true)else(false));
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_801=true   {
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          var_150_node:=var_149_temp;
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          var_152_breakVariable_7:=true;
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_806:=Not[var_152_breakVariable_7];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_806=true   {
+                                       var t_805:boolean;
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_805:=Not[var_152_breakVariable_7];
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_805=true   {
+                                                var t_804:boolean;
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_804:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_child,
+                                                      null]=>(true)else(false));
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_804=true{
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         if isEmptyOrNull[var_149_temp]{
+                                                            throw:=java_lang_NullPointerExceptionLit;
+                                                         } else {
+                                                            var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                         };
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   } else    {
+                                                         var t_802:null+roops_core_objects_BinomialHeapNode;
+                                                         var t_803:boolean;
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            if isEmptyOrNull[var_149_temp]
+                                                            or 
+                                                            isEmptyOrNull[var_149_temp.roops_core_objects_BinomialHeapNode_child]
+                                                            {
+                                                               throw:=java_lang_NullPointerExceptionLit;
+                                                            } else {
+                                                               call findANodeWithKey[var_149_temp.roops_core_objects_BinomialHeapNode_child,throw,t_802,param_value_27];
+                                                            };
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            var_150_node:=t_802;
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            t_803:=(equ[var_150_node,
+                                                               null]=>(true)else(false));
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false){
+                                                            if t_803=true{
+                                                               if (
+                                                                 throw=null)
+                                                               and 
+                                                               (
+                                                                 exit_stmt_reached=false)
+                                                               and 
+                                                               (
+                                                                 true=true){
+                                                                  if isEmptyOrNull[var_149_temp]{
+                                                                     throw:=java_lang_NullPointerExceptionLit;
+                                                                  } else {
+                                                                     var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                                  };
+                                                               } else {
+                                                                  skip;
+                                                               };
+                                                            } else {
+                                                               if (
+                                                                 throw=null)
+                                                               and 
+                                                               (
+                                                                 exit_stmt_reached=false)
+                                                               and 
+                                                               (
+                                                                 true=true){
+                                                                  var_151_breakVariable_8:=true;
+                                                               } else {
+                                                                  skip;
+                                                               };
+                                                            };
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                   ;
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_825:=Not[var_152_breakVariable_7];
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_825=true   {
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_827:=Not[var_151_breakVariable_8];
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_827=true   {
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_828:=(neq[var_149_temp,
+                                                      null]=>(true)else(false));
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_828=true{
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         t_826:=true;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   } else {
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         t_826:=false;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_826:=false;
+                                             } else {
+                                                skip;
+                                             };
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_826=true{
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_824:=true;
+                                             } else {
+                                                skip;
+                                             };
+                                          } else {
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_824:=false;
+                                             } else {
+                                                skip;
+                                             };
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_824:=false;
+                                    } else {
+                                       skip;
+                                    };
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_824=true   {
+                                       var t_819:boolean;
+                                       var t_820:boolean;
+                                       var t_821:boolean;
+                                       var t_822:boolean;
+                                       var t_823:boolean;
+                                       var t_807:boolean;
+                                       var t_812:boolean;
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_807:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_key,
+                                             param_value_27]=>(true)else(false));
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_807=true   {
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   var_150_node:=var_149_temp;
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   var_152_breakVariable_7:=true;
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_812:=Not[var_152_breakVariable_7];
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_812=true   {
+                                                var t_811:boolean;
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_811:=Not[var_152_breakVariable_7];
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_811=true   {
+                                                         var t_810:boolean;
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            t_810:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_child,
+                                                               null]=>(true)else(false));
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false){
+                                                            if t_810=true{
+                                                               if (
+                                                                 throw=null)
+                                                               and 
+                                                               (
+                                                                 exit_stmt_reached=false)
+                                                               and 
+                                                               (
+                                                                 true=true){
+                                                                  if isEmptyOrNull[var_149_temp]{
+                                                                     throw:=java_lang_NullPointerExceptionLit;
+                                                                  } else {
+                                                                     var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                                  };
+                                                               } else {
+                                                                  skip;
+                                                               };
+                                                            } else    {
+                                                                  var t_808:null+roops_core_objects_BinomialHeapNode;
+                                                                  var t_809:boolean;
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false)
+                                                                  and 
+                                                                  (
+                                                                    true=true){
+                                                                     if isEmptyOrNull[var_149_temp]
+                                                                     or 
+                                                                     isEmptyOrNull[var_149_temp.roops_core_objects_BinomialHeapNode_child]
+                                                                     {
+                                                                        throw:=java_lang_NullPointerExceptionLit;
+                                                                     } else {
+                                                                        call findANodeWithKey[var_149_temp.roops_core_objects_BinomialHeapNode_child,throw,t_808,param_value_27];
+                                                                     };
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false)
+                                                                  and 
+                                                                  (
+                                                                    true=true){
+                                                                     var_150_node:=t_808;
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false)
+                                                                  and 
+                                                                  (
+                                                                    true=true){
+                                                                     t_809:=(equ[var_150_node,
+                                                                        null]=>(true)else(false));
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false){
+                                                                     if t_809=true{
+                                                                        if (
+                                                                          throw=null)
+                                                                        and 
+                                                                        (
+                                                                          exit_stmt_reached=false)
+                                                                        and 
+                                                                        (
+                                                                          true=true){
+                                                                           if isEmptyOrNull[var_149_temp]{
+                                                                              throw:=java_lang_NullPointerExceptionLit;
+                                                                           } else {
+                                                                              var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                                           };
+                                                                        } else {
+                                                                           skip;
+                                                                        };
+                                                                     } else {
+                                                                        if (
+                                                                          throw=null)
+                                                                        and 
+                                                                        (
+                                                                          exit_stmt_reached=false)
+                                                                        and 
+                                                                        (
+                                                                          true=true){
+                                                                           var_151_breakVariable_8:=true;
+                                                                        } else {
+                                                                           skip;
+                                                                        };
+                                                                     };
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                               
+                                                               }
+                                                            ;
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                    else {
+                                                      skip;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_820:=Not[var_152_breakVariable_7];
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_820=true   {
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_822:=Not[var_151_breakVariable_8];
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_822=true   {
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            t_823:=(neq[var_149_temp,
+                                                               null]=>(true)else(false));
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false){
+                                                            if t_823=true{
+                                                               if (
+                                                                 throw=null)
+                                                               and 
+                                                               (
+                                                                 exit_stmt_reached=false)
+                                                               and 
+                                                               (
+                                                                 true=true){
+                                                                  t_821:=true;
+                                                               } else {
+                                                                  skip;
+                                                               };
+                                                            } else {
+                                                               if (
+                                                                 throw=null)
+                                                               and 
+                                                               (
+                                                                 exit_stmt_reached=false)
+                                                               and 
+                                                               (
+                                                                 true=true){
+                                                                  t_821:=false;
+                                                               } else {
+                                                                  skip;
+                                                               };
+                                                            };
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                    else {
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         t_821:=false;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_821=true{
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         t_819:=true;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   } else {
+                                                      if (
+                                                        throw=null)
+                                                      and 
+                                                      (
+                                                        exit_stmt_reached=false)
+                                                      and 
+                                                      (
+                                                        true=true){
+                                                         t_819:=false;
+                                                      } else {
+                                                         skip;
+                                                      };
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             if (
+                                               throw=null)
+                                             and 
+                                             (
+                                               exit_stmt_reached=false)
+                                             and 
+                                             (
+                                               true=true){
+                                                t_819:=false;
+                                             } else {
+                                                skip;
+                                             };
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_819=true   {
+                                                var t_813:boolean;
+                                                var t_818:boolean;
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_813:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_key,
+                                                      param_value_27]=>(true)else(false));
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_813=true   {
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            var_150_node:=var_149_temp;
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            var_152_breakVariable_7:=true;
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                    else {
+                                                      skip;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_818:=Not[var_152_breakVariable_7];
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_818=true   {
+                                                         var t_817:boolean;
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            t_817:=Not[var_152_breakVariable_7];
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false){
+                                                            if t_817=true   {
+                                                                  var t_816:boolean;
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false)
+                                                                  and 
+                                                                  (
+                                                                    true=true){
+                                                                     t_816:=(equ[var_149_temp.roops_core_objects_BinomialHeapNode_child,
+                                                                        null]=>(true)else(false));
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                                  if (
+                                                                    throw=null)
+                                                                  and 
+                                                                  (
+                                                                    exit_stmt_reached=false){
+                                                                     if t_816=true{
+                                                                        if (
+                                                                          throw=null)
+                                                                        and 
+                                                                        (
+                                                                          exit_stmt_reached=false)
+                                                                        and 
+                                                                        (
+                                                                          true=true){
+                                                                           if isEmptyOrNull[var_149_temp]{
+                                                                              throw:=java_lang_NullPointerExceptionLit;
+                                                                           } else {
+                                                                              var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                                           };
+                                                                        } else {
+                                                                           skip;
+                                                                        };
+                                                                     } else    {
+                                                                           var t_814:null+roops_core_objects_BinomialHeapNode;
+                                                                           var t_815:boolean;
+                                                                           if (
+                                                                             throw=null)
+                                                                           and 
+                                                                           (
+                                                                             exit_stmt_reached=false)
+                                                                           and 
+                                                                           (
+                                                                             true=true){
+                                                                              if isEmptyOrNull[var_149_temp]
+                                                                              or 
+                                                                              isEmptyOrNull[var_149_temp.roops_core_objects_BinomialHeapNode_child]
+                                                                              {
+                                                                                 throw:=java_lang_NullPointerExceptionLit;
+                                                                              } else {
+                                                                                 call findANodeWithKey[var_149_temp.roops_core_objects_BinomialHeapNode_child,throw,t_814,param_value_27];
+                                                                              };
+                                                                           } else {
+                                                                              skip;
+                                                                           };
+                                                                           if (
+                                                                             throw=null)
+                                                                           and 
+                                                                           (
+                                                                             exit_stmt_reached=false)
+                                                                           and 
+                                                                           (
+                                                                             true=true){
+                                                                              var_150_node:=t_814;
+                                                                           } else {
+                                                                              skip;
+                                                                           };
+                                                                           if (
+                                                                             throw=null)
+                                                                           and 
+                                                                           (
+                                                                             exit_stmt_reached=false)
+                                                                           and 
+                                                                           (
+                                                                             true=true){
+                                                                              t_815:=(equ[var_150_node,
+                                                                                 null]=>(true)else(false));
+                                                                           } else {
+                                                                              skip;
+                                                                           };
+                                                                           if (
+                                                                             throw=null)
+                                                                           and 
+                                                                           (
+                                                                             exit_stmt_reached=false){
+                                                                              if t_815=true{
+                                                                                 if (
+                                                                                   throw=null)
+                                                                                 and 
+                                                                                 (
+                                                                                   exit_stmt_reached=false)
+                                                                                 and 
+                                                                                 (
+                                                                                   true=true){
+                                                                                    if isEmptyOrNull[var_149_temp]{
+                                                                                       throw:=java_lang_NullPointerExceptionLit;
+                                                                                    } else {
+                                                                                       var_149_temp:=var_149_temp.roops_core_objects_BinomialHeapNode_sibling;
+                                                                                    };
+                                                                                 } else {
+                                                                                    skip;
+                                                                                 };
+                                                                              } else {
+                                                                                 if (
+                                                                                   throw=null)
+                                                                                 and 
+                                                                                 (
+                                                                                   exit_stmt_reached=false)
+                                                                                 and 
+                                                                                 (
+                                                                                   true=true){
+                                                                                    var_151_breakVariable_8:=true;
+                                                                                 } else {
+                                                                                    skip;
+                                                                                 };
+                                                                              };
+                                                                           } else {
+                                                                              skip;
+                                                                           };
+                                                                        
+                                                                        }
+                                                                     ;
+                                                                  } else {
+                                                                     skip;
+                                                                  };
+                                                               
+                                                               }
+                                                             else {
+                                                               skip;
+                                                            };
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                    else {
+                                                      skip;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  skip;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_840:=Not[var_152_breakVariable_7];
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_840=true   {
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_842:=Not[var_151_breakVariable_8];
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_842=true   {
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_843:=(neq[var_149_temp,
+                                    null]=>(true)else(false));
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_843=true{
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_841:=true;
+                                    } else {
+                                       skip;
+                                    };
+                                 } else {
+                                    if (
+                                      throw=null)
+                                    and 
+                                    (
+                                      exit_stmt_reached=false)
+                                    and 
+                                    (
+                                      true=true){
+                                       t_841:=false;
+                                    } else {
+                                       skip;
+                                    };
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_841:=false;
+                           } else {
+                              skip;
+                           };
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_841=true{
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_839:=true;
+                           } else {
+                              skip;
+                           };
+                        } else {
+                           if (
+                             throw=null)
+                           and 
+                           (
+                             exit_stmt_reached=false)
+                           and 
+                           (
+                             true=true){
+                              t_839:=false;
+                           } else {
+                              skip;
+                           };
+                        };
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)
+                  and 
+                  (
+                    true=true){
+                     t_839:=false;
+                  } else {
+                     skip;
+                  };
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_844:=Not[t_839];
+            } else {
+               skip;
+            };
+            assert t_844=true;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if true=true{
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)   {
+                        return:=var_150_node;
+                        exit_stmt_reached:=true;
+                     
+                     }
+                   else {
+                     skip;
+                  };
+               } else {
+                  skip;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  return:=null;
+                  exit_stmt_reached:=true;
+               
+               }
+             else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::BinomialHeapNode[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_key:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_degree:=0;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_parent:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_sibling:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               if isEmptyOrNull[thiz]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  thiz.roops_core_objects_BinomialHeapNode_child:=((null+roops_core_objects_BinomialHeapNode) & (null));
+               };
+            } else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+program roops_core_objects_BinomialHeapNode::findMinNode[
+  var thiz:roops_core_objects_BinomialHeapNode,
+  var throw:java_lang_Throwable+null,
+  var return:null+roops_core_objects_BinomialHeapNode] 
+Specification 
+{
+  SpecCase #0 {
+   requires {
+      true=true
+   }
+   
+   ensures {
+      (
+        throw'=null)
+      implies 
+              liftExpression[true]
+   }
+   
+   modifies {
+   EVERYTHING}
+  }
+}
+Implementation 
+
+   {
+      skip;
+      {
+         throw:=null;
+         var exit_stmt_reached:boolean;
+         exit_stmt_reached:=false;
+         {
+            var var_146_x:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_146_x:=thiz;
+            } else {
+               skip;
+            };
+            var var_147_y:null+roops_core_objects_BinomialHeapNode;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               var_147_y:=thiz;
+            } else {
+               skip;
+            };
+            var var_148_min:Int;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if isEmptyOrNull[var_146_x]{
+                  throw:=java_lang_NullPointerExceptionLit;
+               } else {
+                  var_148_min:=var_146_x.roops_core_objects_BinomialHeapNode_key;
+               };
+            } else {
+               skip;
+            };
+            var t_792:boolean;
+            var t_793:boolean;
+            var t_794:boolean;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_792:=(neq[var_146_x,
+                  null]=>(true)else(false));
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if t_792=true   {
+                     var t_791:boolean;
+                     var t_785:boolean;
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_785:=(lt[var_146_x.roops_core_objects_BinomialHeapNode_key,
+                          var_148_min]=>(true)else(false));
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_785=true   {
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 var_147_y:=var_146_x;
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 if isEmptyOrNull[var_146_x]{
+                                    throw:=java_lang_NullPointerExceptionLit;
+                                 } else {
+                                    var_148_min:=var_146_x.roops_core_objects_BinomialHeapNode_key;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        if isEmptyOrNull[var_146_x]{
+                           throw:=java_lang_NullPointerExceptionLit;
+                        } else {
+                           var_146_x:=var_146_x.roops_core_objects_BinomialHeapNode_sibling;
+                        };
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false)
+                     and 
+                     (
+                       true=true){
+                        t_791:=(neq[var_146_x,
+                           null]=>(true)else(false));
+                     } else {
+                        skip;
+                     };
+                     if (
+                       throw=null)
+                     and 
+                     (
+                       exit_stmt_reached=false){
+                        if t_791=true   {
+                              var t_790:boolean;
+                              var t_786:boolean;
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_786:=(lt[var_146_x.roops_core_objects_BinomialHeapNode_key,
+                                   var_148_min]=>(true)else(false));
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_786=true   {
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          var_147_y:=var_146_x;
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          if isEmptyOrNull[var_146_x]{
+                                             throw:=java_lang_NullPointerExceptionLit;
+                                          } else {
+                                             var_148_min:=var_146_x.roops_core_objects_BinomialHeapNode_key;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 if isEmptyOrNull[var_146_x]{
+                                    throw:=java_lang_NullPointerExceptionLit;
+                                 } else {
+                                    var_146_x:=var_146_x.roops_core_objects_BinomialHeapNode_sibling;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false)
+                              and 
+                              (
+                                true=true){
+                                 t_790:=(neq[var_146_x,
+                                    null]=>(true)else(false));
+                              } else {
+                                 skip;
+                              };
+                              if (
+                                throw=null)
+                              and 
+                              (
+                                exit_stmt_reached=false){
+                                 if t_790=true   {
+                                       var t_789:boolean;
+                                       var t_787:boolean;
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_787:=(lt[var_146_x.roops_core_objects_BinomialHeapNode_key,
+                                            var_148_min]=>(true)else(false));
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_787=true   {
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   var_147_y:=var_146_x;
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   if isEmptyOrNull[var_146_x]{
+                                                      throw:=java_lang_NullPointerExceptionLit;
+                                                   } else {
+                                                      var_148_min:=var_146_x.roops_core_objects_BinomialHeapNode_key;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          if isEmptyOrNull[var_146_x]{
+                                             throw:=java_lang_NullPointerExceptionLit;
+                                          } else {
+                                             var_146_x:=var_146_x.roops_core_objects_BinomialHeapNode_sibling;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false)
+                                       and 
+                                       (
+                                         true=true){
+                                          t_789:=(neq[var_146_x,
+                                             null]=>(true)else(false));
+                                       } else {
+                                          skip;
+                                       };
+                                       if (
+                                         throw=null)
+                                       and 
+                                       (
+                                         exit_stmt_reached=false){
+                                          if t_789=true   {
+                                                var t_788:boolean;
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   t_788:=(lt[var_146_x.roops_core_objects_BinomialHeapNode_key,
+                                                     var_148_min]=>(true)else(false));
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false){
+                                                   if t_788=true   {
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            var_147_y:=var_146_x;
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                         if (
+                                                           throw=null)
+                                                         and 
+                                                         (
+                                                           exit_stmt_reached=false)
+                                                         and 
+                                                         (
+                                                           true=true){
+                                                            if isEmptyOrNull[var_146_x]{
+                                                               throw:=java_lang_NullPointerExceptionLit;
+                                                            } else {
+                                                               var_148_min:=var_146_x.roops_core_objects_BinomialHeapNode_key;
+                                                            };
+                                                         } else {
+                                                            skip;
+                                                         };
+                                                      
+                                                      }
+                                                    else {
+                                                      skip;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                                if (
+                                                  throw=null)
+                                                and 
+                                                (
+                                                  exit_stmt_reached=false)
+                                                and 
+                                                (
+                                                  true=true){
+                                                   if isEmptyOrNull[var_146_x]{
+                                                      throw:=java_lang_NullPointerExceptionLit;
+                                                   } else {
+                                                      var_146_x:=var_146_x.roops_core_objects_BinomialHeapNode_sibling;
+                                                   };
+                                                } else {
+                                                   skip;
+                                                };
+                                             
+                                             }
+                                           else {
+                                             skip;
+                                          };
+                                       } else {
+                                          skip;
+                                       };
+                                    
+                                    }
+                                  else {
+                                    skip;
+                                 };
+                              } else {
+                                 skip;
+                              };
+                           
+                           }
+                         else {
+                           skip;
+                        };
+                     } else {
+                        skip;
+                     };
+                  
+                  }
+                else {
+                  skip;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_793:=(neq[var_146_x,
+                  null]=>(true)else(false));
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)
+            and 
+            (
+              true=true){
+               t_794:=Not[t_793];
+            } else {
+               skip;
+            };
+            assert t_794=true;
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false){
+               if true=true{
+                  if (
+                    throw=null)
+                  and 
+                  (
+                    exit_stmt_reached=false)   {
+                        return:=var_147_y;
+                        exit_stmt_reached:=true;
+                     
+                     }
+                   else {
+                     skip;
+                  };
+               } else {
+                  skip;
+               };
+            } else {
+               skip;
+            };
+            if (
+              throw=null)
+            and 
+            (
+              exit_stmt_reached=false)   {
+                  return:=null;
+                  exit_stmt_reached:=true;
+               
+               }
+             else {
+               skip;
+            };
+         
+         }
+      
+      }
+      skip;
+   
+   }
+
+
+

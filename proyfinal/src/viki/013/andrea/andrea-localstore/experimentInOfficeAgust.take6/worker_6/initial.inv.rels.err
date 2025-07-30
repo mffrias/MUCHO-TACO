@@ -1,8 +1,12 @@
 Warning #1
-Subset operator is redundant, because the right subexpression is always empty.
-Left type = {this/TreeSetNode->this/TreeSetNode, this/TreeSetNode->this/null}
-Right type = {none->none}
+Subset operator is redundant, because the left and right subexpressions are always disjoint.
+Left type = {this/BinHeapNode}
+Right type = {this/BinHeap}
 Warning #2
 Subset operator is redundant, because the right subexpression is always empty.
-Left type = {this/TreeSetNode->this/TreeSetNode, this/TreeSetNode->this/null}
+Left type = {this/BinHeapNode->this/BinHeapNode, this/BinHeapNode->this/null}
+Right type = {none->none}
+Warning #3
+Subset operator is redundant, because the right subexpression is always empty.
+Left type = {this/BinHeapNode->this/BinHeapNode, this/BinHeapNode->this/null}
 Right type = {none->none}

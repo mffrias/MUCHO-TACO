@@ -1,0 +1,20 @@
+Reading from standard input... Use '-h' or '--help' for help.
+==================================[MINISAT]===================================
+| Conflicts |     ORIGINAL     |              LEARNT              | Progress |
+|           | Clauses Literals |   Limit Clauses Literals  Lit/Cl |          |
+==============================================================================
+|         0 |  324696   913164 |  108232       0        0     nan |  0.000 % |
+|       100 |  324710   913164 |  119055      86      919    10.7 | 29.391 % |
+|       251 |  324725   913164 |  130960     218     7224    33.1 | 29.399 % |
+|       480 |  324741   913164 |  144056     427    28260    66.2 | 29.434 % |
+
+*** INTERRUPTED ***
+restarts              : 4
+conflicts             : 818            (2838 /sec)
+decisions             : 24292          (84287 /sec)
+propagations          : 1673632        (5807069 /sec)
+conflict literals     : 55115          (30.05 % deleted)
+Memory used           : 21.60 MB
+CPU time              : 0.288206 s
+
+*** INTERRUPTED ***

@@ -19,19 +19,19 @@ class Process:
         self.my_host = andrea.network.map.my_host
         self.my_dir  = andrea.settings.local_store_dir(self.my_rank)
         self.bb = BigBrother(self.my_dir + '/events_' + str(self.my_rank) + '.pck')
-        print("Debug-mfrias4: process.py line 21. Dir in BigBrother bb = ", self.my_dir + '/events_' + str(self.my_rank) + '.pck')
+        #print("Debug-mfrias4: process.py line 21. Dir in BigBrother bb = ", self.my_dir + '/events_' + str(self.my_rank) + '.pck')
 
     def init_local_dirs(self):
         "Ensure all necessary local storage dirs exist on our host."
 
-        print("Debug-mfrias4: process.py line 26. network_map = ", andrea.network.map)
+        #print("Debug-mfrias4: process.py line 26. network_map = ", andrea.network.map)
 
         if andrea.network.map.am_host_leader():
-            print("Debug-mfrias4: process.py line 28. I am the host leader (the one with smallest rank within the host)")
+            #print("Debug-mfrias4: process.py line 28. I am the host leader (the one with smallest rank within the host)")
             # To avoid race conditions, one process makes all.
             ensure_directory(andrea.settings.local_store())
             for rank in andrea.network.map.ranks_of(andrea.network.map.my_host):
-                print("Debug-mfrias4 process.py line 32. Rank is ", rank)
+                #print("Debug-mfrias4 process.py line 32. Rank is ", rank)
                 ensure_directory(andrea.settings.local_store_dir(rank))
 
     def cleanup(self):
@@ -53,11 +53,12 @@ class BigBrother:
 
     def add(self, event):
         self.events.append(event)
+        #print("Debug-mfrias4 andrea.master.py line 56. Event = ", event, "selv.events = ", self.events)
         if len(self.events) > 20:
             #before = len(self.events)
             self.dump_update()
             #after = len(self.events)
-            #print 'BB:updated %s ; %d -> %d' % (self.path, before, after)
+            #print('BB:updated %s ; %d -> %d' % (self.path, before, after))
         return event
 
     def dump_update(self):

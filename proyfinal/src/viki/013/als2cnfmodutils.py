@@ -37,6 +37,7 @@ def get_rels_var_limits(filename, rels):
     return ret
     
 def get_rels_sets(string, rels):
+    print(f"Rels value: {rels}\n")
     result = {}
     for rel in rels:
         result[rel] = parseQF(string, rel)
@@ -121,6 +122,7 @@ class Alloy2Rels:
     
     def launch(self, path_als):
         path_rels = path_als + ".rels"
+        
         p = Popen([self.java_home, "-jar", self.java_class_path, "-B", "-C", "-b", path_als], stdout=open(path_rels + ".out", "w"), stderr=open(path_rels + ".err", "w"))
         p.wait()
 
@@ -138,7 +140,7 @@ class Alloy2Cnf:
 class MinisatHotPipe(Minisat220):
 
     def launch(self, header, cnf, count, res, cnf_path):
-        print("Debug-mfrias4, als2cnfmodutils.py line 141. Minisat to be launched")
+        #print("Debug-mfrias4, als2cnfmodutils.py line 141. Minisat to be launched")
         if self.running:
             raise Exception("Can't launch while already running.")
         self.running = True
@@ -158,9 +160,9 @@ class MinisatHotPipe(Minisat220):
         #self.cnf_file.write(res)
         #self.cnf_file.close()
         # END DEBUG
-        print("Llegamos a Popen con las variables","self.exe_path]",self.exe_path,"self.out_file",self.out_file,"self.err_file" , self.err_file, " ")
+        #print("Llegamos a Popen con las variables","self.exe_path]",self.exe_path,"self.out_file",self.out_file,"self.err_file" , self.err_file, " ")
         self.process = Popen([self.exe_path], stdin=PIPE, stdout=self.out_file, stderr=self.err_file, bufsize=-1, text=True)
-        print("pasamos popen")
+        #print("pasamos popen")
         self.process.stdin.write(header)
         ti = andrea.network.time()
         cstring = io.StringIO(cnf)
@@ -178,19 +180,22 @@ class MinisatHotPipe(Minisat220):
 #   cnf: als->cnf.
 #   cnf_inv: als_inv ->cnf.
 def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=True):
-    print("Debug-mfrias4, als2cnfmodutils.py line 181. Entering generate_artifacts. Verbose = True")
+    #print("Debug-mfrias4, als2cnfmodutils.py line 181. Entering generate_artifacts. Verbose = True")
     java_home = settings['java_home']
     als2cnf = settings['als2cnf']
     als2rels = settings['als2rels']
-    
+
     tool = Alloy2Cnf(java_home, als2cnf)
     
     if verbose: 
         print ("Converting als -> cnf ...")
-    
+
     tool.launch(als_path)
     cnf = als_path + ".cnf"
     
+    #while(True):
+    #    print('True')
+
     if verbose:
         print ("Converting als_inv -> cnf ...")
     
@@ -202,10 +207,12 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Tr
         print ("Generating rels ...")
 
     tool.launch(als_path)   
-    print("tool was lunched. als path is: " , als_path)
+    if verbose:
+        print("tool was lunched. als path is: " , als_path)
     rels_path = als_path.replace(".als", ".rels")
     tool.launch(als_inv_path)
-    print("tool was lunched 2")
+    if verbose:
+        print("tool was lunched 2")
     rels_inv_path = als_inv_path.replace(".inv", ".inv.rels")
 
     if verbose:
@@ -233,7 +240,9 @@ def generate_artifacts(als_path, als_inv_path, scope, rels, settings, verbose=Tr
 
     if verbose:
         print ("Done")
-    
+
+    #print('\nals2cnfmodutils generate_artifacts returning....')
+
     return (tuple2val, restrictions, file2string(cnf), file2string(cnf_inv), rels_sets, inv_tuple2val, rels_inv_sets)
 
 def generate_cnf_restrictions(new_als_restrictions_file, rels_sets, tuple2val):
@@ -262,12 +271,14 @@ def file2string(filename):
     data = ""
     for line in f.readlines():
         data += line
+
     return data
     
 def generate_new_cnf(cnf, als_child, rels_sets, tuple2val):
     (res, clauses) = generate_cnf_restrictions(als_child, rels_sets, tuple2val)
     header = ""
     count = len(cnf)
+
     for i in range(count-1, -1, -1):
         c = cnf[i]
         header += c
@@ -277,6 +288,7 @@ def generate_new_cnf(cnf, als_child, rels_sets, tuple2val):
     header = header[::-1].strip()
     m = re.match(r"p cnf (\d+) (\d+)", header)
     header = "p cnf " + m.group(1) + " " + str(int(m.group(2)) + clauses) + "\n"
+
     return (header, count, res)
 
 def main():
@@ -301,12 +313,16 @@ def main():
     print ("INV: " + als_inv)
     print ("SCOPE: " + str(scope))
     print ("RELS: " + str(rels))
+
     (tuple2val, restrictions, cnf, cnf_inv, rels_sets, inv_tuple2val, rels_inv_sets) = generate_artifacts(als, als_inv, scope, rels, settings)
+    
     open("cotas-" + als, "w").write(restrictions)
+
     if als_child:
         print ("Generating new restrictions ...")
         (header, count, res) = generate_new_cnf(cnf, open(als_child, "r"), rels_sets, tuple2val)
         filename = als_child + ".cnf"
+
         f = open(filename, "w")
         f.write(header)
         for i in range(0, count):

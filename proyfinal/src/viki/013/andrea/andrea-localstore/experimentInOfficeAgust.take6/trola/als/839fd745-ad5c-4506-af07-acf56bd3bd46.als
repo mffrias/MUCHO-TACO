@@ -1,0 +1,49 @@
+ 
+fact { 
+QF.bright_0 in none->none 
+QF.bleft_0 in none->none 
+
+
+
+
+QF.fright_0 in
+N0->N2
++N1->N4
++N2->N6
++N3->N8
++N4->null
++N5->N11
++N6->null
++N7->null
++N8->null
++N9->null
++N10->null
++N11->null
++N12->null
++N13->null
++N14->null
++N15->N16
++N15->null
++N16->null
+
+QF.fleft_0 in
+N0->N1
++N1->N3
++N2->N5
++N3->N7
++N4->N9
++N5->N10
++N6->null
++N7->null
++N8->N12
++N9->null
++N10->N13
++N11->N14
++N12->null
++N13->null
++N14->null
++N15->N16
++N15->null
++N16->null
+
+} 

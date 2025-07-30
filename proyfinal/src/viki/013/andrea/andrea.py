@@ -1,6 +1,9 @@
 import andrea.settings
 import network
 import sys, os
+import subprocess
+
+sys.path.append("../mpi4py-3.0.3")
 
 from utils    import ensure_directory
 from utils    import secs2human_older
@@ -14,7 +17,7 @@ from datetime import datetime
 
 def main():
 
-    print("Debug-mfrias4: Entering andrea.py line 17, method main")
+    #print("Deb  ug-mfrias4: Entering andrea.py line 17, method main")
     network.map = network.ProcessMap()
 
     config_path = parse_cmd_line()
@@ -24,11 +27,11 @@ def main():
     network.sync_zero_time()
     sleep(network.map.my_rank * 0.01)
 
-    print("Debug-mfrias4: andrea.py line 27, just before invoking create_output_file. network.map = ", network.map)
+    #print("Deb  ug-mfrias4: andrea.py line 27, just before invoking create_output_file. network.map = ", network.map)
 
     create_output_file(network.map, config_path, show_welcome_banner, config_path, ANDREA_LOGO)
 
-    print("Debug-mfrias4: andrea.py line 27", config_path)
+    #print("Deb  ug-mfrias4: andrea.py line 27", config_path)
 
     role2class = dict({Role.M: Master, Role.W: Worker})
 
@@ -42,6 +45,7 @@ def main():
           'closing bolich after', secs2human_older(network.time()))
     
 def show_welcome_banner(andrea_network_map, config_path, app_logo):
+
     print(config_path)
     # Show a welcome message
     takestr = '(take %s of %s) on %d CPUs' % \
@@ -60,15 +64,24 @@ def show_welcome_banner(andrea_network_map, config_path, app_logo):
     print('   conflog:   ', andrea.settings.outdir_path('andrea.conf'))
     print('   tasklog:   ', andrea.settings.outdir_path('andrea.tlog.csv'))
     print('\n')
+
+    # Generation of als and inv files before MUCHO-TACO's main process
+    javatest = andrea.settings.experiment['java_test']
+    print(f'\nALS Generation Test: {javatest}\n')
+
+    try:
+        subprocess.run(["./generateALS.sh", javatest],check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"ALS Generation failed with error: {e}")
     
 def create_output_file(andrea_network_map, config_path, on_success, *args):
     had_to_create = False;
 
-    print("Debug-mfrias4: andrea.py line 67: networkMap = ", andrea_network_map, "    on_success = ", on_success, "*args = ", *args)
+    #print("Deb  ug-mfrias4: andrea.py line 67: networkMap = ", andrea_network_map, "    on_success = ", on_success, "*args = ", *args)
 
     if andrea_network_map.am_master():
 
-        print("Debug-mfrias4: andrea.py line 71: am_master = true. Mu rank = ", andrea_network_map.my_rank)
+        #print("Deb  ug-mfrias4: andrea.py line 71: am_master = true. Mu rank = ", andrea_network_map.my_rank)
 
         had_to_create = ensure_directory(andrea.settings.outdir_path())
         if had_to_create:
@@ -80,11 +93,11 @@ def create_output_file(andrea_network_map, config_path, on_success, *args):
             # (unless the given one is there already!)
             if config_path != andrea.settings.outdir_path('andrea.conf'):
                 copyfile(config_path, andrea.settings.outdir_path('andrea.conf'))
-                print("Debug-mfrias4: andrea.py line 83 args: ", args)
-                print("Debug-mfrias4: andrea.py line 83 args[0]: ", args[0])
-                print("Debug-mfrias4: andrea.py line 83 args[1]: ", args[1])
+                #print("Deb  ug-mfrias4: andrea.py line 83 args: ", args)
+                #print("Deb  ug-mfrias4: andrea.py line 83 args[0]: ", args[0])
+                #print("Deb  ug-mfrias4: andrea.py line 83 args[1]: ", args[1])
                 tmp_args = andrea_network_map, args[0], args[1]
-                print("Debug-mfrias4: andrea.py line 87 tmp_args: ", tmp_args)
+                #print("Deb  ug-mfrias4: andrea.py line 87 tmp_args: ", tmp_args)
                 on_success(*tmp_args)
         else:
             print('\nRefusing to clobber existing outdir (for safety).\n')

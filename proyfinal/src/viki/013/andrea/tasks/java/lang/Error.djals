@@ -1,0 +1,16 @@
+//-------------- java_lang_Error --------------//
+module java_lang_Error
+abstract sig java_lang_Error extends java_lang_Throwable {}
+{}
+one sig java_lang_ErrorLit extends java_lang_Error {}
+{}
+
+program java_lang_Error::Constructor[
+  var thiz:java_lang_Error,
+  var throw:java_lang_Throwable+null] 
+Implementation 
+
+   skip;
+
+
+
